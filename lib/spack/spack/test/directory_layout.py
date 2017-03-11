@@ -92,23 +92,31 @@ def test_read_and_write_spec(
         # TODO: increase reuse of build dependencies.
         stored_deptypes = ('link', 'run')
         expected = spec.copy(deps=stored_deptypes)
+        assert expected.concrete
         assert expected == spec_from_file
-        assert expected.eq_dag  # msg , spec_from_file
+        assert expected.eq_dag(spec_from_file)
         assert spec_from_file.concrete
 
         # Ensure that specs that come out "normal" are really normal.
         with open(spec_path) as spec_file:
             read_separately = Spec.from_yaml(spec_file.read())
 
-            # TODO: revise this when build deps are in dag_hash
-            norm = read_separately.normalized().copy(deps=stored_deptypes)
-            assert norm == spec_from_file
+        # TODO: revise this when build deps are in dag_hash
+        norm = read_separately.normalized().copy(deps=stored_deptypes)
+        assert norm == spec_from_file
+        assert norm.eq_dag(spec_from_file)
 
-            # TODO: revise this when build deps are in dag_hash
-            conc = read_separately.concretized().copy(deps=stored_deptypes)
-            assert conc == spec_from_file
+        # TODO: revise this when build deps are in dag_hash
+        conc = read_separately.concretized().copy(deps=stored_deptypes)
+        assert conc == spec_from_file
+        assert conc.eq_dag(spec_from_file)
 
-        # Make sure the hash of the read-in spec is the same
+        if expected.name == 'callpath':
+            with open('/Users/gamblin2/a', 'w') as f:
+                f.write(expected.to_yaml())
+            with open('/Users/gamblin2/b', 'w') as f:
+                f.write(spec_from_file.to_yaml())
+
         assert expected.dag_hash() == spec_from_file.dag_hash()
 
         # Ensure directories are properly removed

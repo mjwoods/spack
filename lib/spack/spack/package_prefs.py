@@ -25,9 +25,20 @@
 from six import string_types
 from six import iteritems
 
+from llnl.util.lang import classproperty
+
 import spack
 import spack.error
 from spack.version import *
+
+
+_lesser_spec_types = {'compiler': spack.spec.CompilerSpec,
+                      'version': VersionList}
+
+
+def _spec_type(component):
+    """Map from component name to spec type for package prefs."""
+    return _lesser_spec_types.get(component, spack.spec.Spec)
 
 
 def get_packages_config():
@@ -51,6 +62,121 @@ def get_packages_config():
     return config
 
 
+class PackagePrefs(object):
+    """Defines the sort order for a set of specs.
+
+    Spack's package preference implementation uses PackagePrefss to
+    define sort order. The PackagePrefs class looks at Spack's
+    packages.yaml configuration and, when called on a spec, returns a key
+    that can be used to sort that spec in order of the user's
+    preferences.
+
+    You can use it like this:
+
+       # key function sorts CompilerSpecs for `mpich` in order of preference
+       kf = PackagePrefs('mpich', 'compiler')
+       compiler_list.sort(key=kf)
+
+    Or like this:
+
+       # key function to sort VersionLists for OpenMPI in order of preference.
+       kf = PackagePrefs('openmpi', 'version')
+       version_list.sort(key=kf)
+
+    Optionally, you can sort in order of preferred virtual dependency
+    providers.  To do that, provide 'providers' and a third argument
+    denoting the virtual package (e.g., ``mpi``):
+
+       kf = PackagePrefs('trilinos', 'providers', 'mpi')
+       provider_spec_list.sort(key=kf)
+
+    """
+    _packages_config_cache = None
+    _spec_cache = {}
+
+    def __init__(self, pkgname, component, vpkg=None):
+        self.pkgname = pkgname
+        self.component = component
+        self.vpkg = vpkg
+
+    def __call__(self, spec):
+        """Return a key object (an index) that can be used to sort spec.
+
+           Sort is done in package order. We don't cache the result of
+           this function as Python's sort functions already ensure that the
+           key function is called at most once per sorted element.
+        """
+        spec_order = self._specs_for_pkg(
+            self.pkgname, self.component, self.vpkg)
+
+        # integer is the index of the first spec in order that satisfies
+        # spec, or it's a number larger than any position in the order.
+        return next(
+            (i for i, s in enumerate(spec_order) if spec.satisfies(s)),
+            len(spec_order))
+
+    @classproperty
+    @classmethod
+    def _packages_config(cls):
+        if cls._packages_config_cache is None:
+            cls._packages_config_cache = get_packages_config()
+        return cls._packages_config_cache
+
+    @classmethod
+    def _order_for_package(cls, pkgname, component, vpkg=None, all=True):
+        """Given a package name, sort component (e.g, version, compiler, ...),
+           and an optional vpkg, return the list from the packages config.
+        """
+        pkglist = [pkgname]
+        if all:
+            pkglist.append('all')
+
+        for pkg in pkglist:
+            pkg_entry = cls._packages_config.get(pkg)
+            if not pkg_entry:
+                continue
+
+            order = pkg_entry.get(component)
+            if not order:
+                continue
+
+            # vpkg is one more level
+            if vpkg is not None:
+                order = order.get(vpkg)
+
+            if order:
+                return [str(s).strip() for s in order]
+
+        return []
+
+    @classmethod
+    def _specs_for_pkg(cls, pkgname, component, vpkg=None):
+        """Given a sort order specified by the pkgname/component/second_key,
+           return a list of CompilerSpecs, VersionLists, or Specs for
+           that sorting list.
+        """
+        key = (pkgname, component, vpkg)
+
+        specs = cls._spec_cache.get(key)
+        if specs is None:
+            pkglist = cls._order_for_package(pkgname, component, vpkg)
+            spec_type = _spec_type(component)
+            specs = [spec_type(s) for s in pkglist]
+            cls._spec_cache[key] = specs
+
+        return specs
+
+    @classmethod
+    def clear_caches(cls):
+        cls._packages_config_cache = None
+        cls._spec_cache = {}
+
+    @classmethod
+    def has_preferred_providers(cls, pkgname, vpkg):
+        """Whether specific package has a preferred vpkg providers."""
+        return bool(cls._order_for_package(pkgname, 'providers', vpkg, False))
+
+
 class PreferredPackages(object):
     def __init__(self):
         self.preferred = get_packages_config()
@@ -58,8 +184,8 @@ class PreferredPackages(object):
 
     # Given a package name, sort component (e.g, version, compiler, ...), and
     # a second_key (used by providers), return the list
-    def _order_for_package(self, pkgname, component, second_key,
-                           test_all=True):
+    def order_for_package(self, pkgname, component, second_key=None,
+                          test_all=True):
         pkglist = [pkgname]
         if test_all:
             pkglist.append('all')
@@ -72,16 +198,20 @@ class PreferredPackages(object):
             return [str(s).strip() for s in order]
         return []
 
+    def _component_key(self, pkgname, components, a, b):
+        def okey(c):
+            return next((i for i, oc in enumerate(order) if c.satisfies(oc)),
+                        len(order))
+
     # A generic sorting function. Given a package name and sort
     # component, return less-than-0, 0, or greater-than-0 if
     # a is respectively less-than, equal to, or greater than b.
-    def _component_compare(self, pkgname, component, a, b,
-                           reverse_natural_compare, second_key):
+    def _component_compare(self, pkgname, component, a, b, second_key):
         if a is None:
             return -1
         if b is None:
             return 1
-        orderlist = self._order_for_package(pkgname, component, second_key)
+        orderlist = self.order_for_package(pkgname, component, second_key)
         a_in_list = str(a) in orderlist
         b_in_list = str(b) in orderlist
         if a_in_list and not b_in_list:
@@ -91,20 +221,17 @@ class PreferredPackages(object):
 
         cmp_a = None
         cmp_b = None
-        reverse = None
         if not a_in_list and not b_in_list:
             cmp_a = a
             cmp_b = b
-            reverse = -1 if reverse_natural_compare else 1
         else:
             cmp_a = orderlist.index(str(a))
             cmp_b = orderlist.index(str(b))
-            reverse = 1
 
         if cmp_a < cmp_b:
-            return -1 * reverse
+            return -1
         elif cmp_a > cmp_b:
-            return 1 * reverse
+            return 1
         else:
             return 0
 
@@ -118,6 +245,7 @@ class PreferredPackages(object):
         if not b or (not b.concrete and not second_key):
             return 1
         specs = self._spec_for_pkgname(pkgname, component, second_key)
+
         a_index = None
         b_index = None
         reverse = -1 if reverse_natural_compare else 1
@@ -148,7 +276,7 @@ class PreferredPackages(object):
     def _spec_for_pkgname(self, pkgname, component, second_key):
         key = (pkgname, component, second_key)
         if key not in self._spec_for_pkgname_cache:
-            pkglist = self._order_for_package(pkgname, component, second_key)
+            pkglist = self.order_for_package(pkgname, component, second_key)
             if component == 'compiler':
                 self._spec_for_pkgname_cache[key] = \
                     [spack.spec.CompilerSpec(s) for s in pkglist]
@@ -161,6 +289,7 @@ class PreferredPackages(object):
         return self._spec_for_pkgname_cache[key]
 
     def provider_compare(self, pkgname, provider_str, a, b):
+
         """Return less-than-0, 0, or greater than 0 if a is respecively
            less-than, equal-to, or greater-than b. A and b are possible
            implementations of provider_str. One provider is less-than another
@@ -173,8 +302,8 @@ class PreferredPackages(object):
     def spec_has_preferred_provider(self, pkgname, provider_str):
         """Return True iff the named package has a list of preferred
            providers"""
-        return bool(self._order_for_package(pkgname, 'providers',
-                                            provider_str, False))
+        return bool(self.order_for_package(pkgname, 'providers',
+                                           provider_str, False))
 
     def spec_preferred_variants(self, pkgname):
         """Return a VariantMap of preferred variants and their values"""
@@ -202,15 +331,14 @@ class PreferredPackages(object):
            respectively less-than, equal-to, or greater-than variant b of
            pkgname. One variant is less-than another if it is preferred over
            the other."""
-        return self._component_compare(pkgname, 'variant', a, b, False, None)
+        return self._component_compare(pkgname, 'variant', a, b, None)
 
     def architecture_compare(self, pkgname, a, b):
         """Return less-than-0, 0, or greater than 0 if architecture a of pkgname
            is respectively less-than, equal-to, or greater-than architecture b
            of pkgname. One architecture is less-than another if it is preferred
            over the other."""
-        return self._component_compare(pkgname, 'architecture', a, b,
-                                       False, None)
+        return self._component_compare(pkgname, 'architecture', a, b, None)
 
     def compiler_compare(self, pkgname, a, b):
         """Return less-than-0, 0, or greater than 0 if compiler a of pkgname is
@@ -221,7 +349,7 @@ class PreferredPackages(object):
 
 
 def spec_externals(spec):
-    """Return a list of external specs (with external directory path filled in),
+    """Return a list of external specs (w/external directory path filled in),
        one for each known external installation."""
     # break circular import.
     from spack.build_environment import get_path_from_module
@@ -255,7 +383,8 @@ def spec_externals(spec):
         if external_spec.satisfies(spec):
             external_specs.append(external_spec)
 
-    return external_specs
+    # defensively copy returned specs
+    return [s.copy() for s in external_specs]
 
 
 def is_spec_buildable(spec):

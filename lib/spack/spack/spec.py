@@ -1567,14 +1567,12 @@ class Spec(object):
               a problem.
         """
         # Make an index of stuff this spec already provides
-        # XXX(deptype): 'link' and 'run'?
         self_index = ProviderIndex(self.traverse(), restrict=True)
         changed = False
         done = False
 
         while not done:
             done = True
-            # XXX(deptype): 'link' and 'run'?
             for spec in list(self.traverse()):
                 replacement = None
                 if spec.virtual:
@@ -1600,7 +1598,7 @@ class Spec(object):
 
                         # Replace spec with the candidate and normalize
                         copy = self.copy()
-                        copy[spec.name]._dup(replacement.copy(deps=False))
+                        copy[spec.name]._dup(replacement, deps=False)
 
                         try:
                             # If there are duplicate providers or duplicate
@@ -2321,9 +2319,6 @@ class Spec(object):
         self.external_module = other.external_module
         self.namespace = other.namespace
 
-        self.external = other.external
-        self.external_module = other.external_module
-
         # If we copy dependencies, preserve DAG structure in the new spec
         if deps:
             deptypes = alldeps  # by default copy all deptypes
@@ -2337,6 +2332,7 @@ class Spec(object):
         # These fields are all cached results of expensive operations.
         # If we preserved the original structure, we can copy them
         # safely. If not, they need to be recomputed.
+        # TODO: dependency hashes can be copied more aggressively.
         if deps is True or deps == alldeps:
             self._hash = other._hash
             self._cmp_key_cache = other._cmp_key_cache
@@ -2718,41 +2714,6 @@ class Spec(object):
 
     def dep_string(self):
         return ''.join("^" + dep.format() for dep in self.sorted_deps())
-
-    def __cmp__(self, other):
-        from package_prefs import pkgsort
-
-        # Package name sort order is not configurable, always goes alphabetical
-        if self.name != other.name:
-            return cmp(self.name, other.name)
-
-        # Package version is second in compare order
-        pkgname = self.name
-        if self.versions != other.versions:
-            return pkgsort().version_compare(
-                pkgname, self.versions, other.versions)
-
-        # Compiler is third
-        if self.compiler != other.compiler:
-            return pkgsort().compiler_compare(
-                pkgname, self.compiler, other.compiler)
-
-        # Variants
-        if self.variants != other.variants:
-            return pkgsort().variant_compare(
-                pkgname, self.variants, other.variants)
-
-        # Target
-        if self.architecture != other.architecture:
-            return pkgsort().architecture_compare(
-                pkgname, self.architecture, other.architecture)
-
-        # Dependency is not configurable
-        if self._dependencies != other._dependencies:
-            return -1 if self._dependencies < other._dependencies else 1
-
-        # Equal specs
-        return 0
 
     def __str__(self):
         ret = self.format() + self.dep_string()
