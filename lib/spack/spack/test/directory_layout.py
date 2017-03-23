@@ -111,12 +111,6 @@ def test_read_and_write_spec(
         assert conc == spec_from_file
         assert conc.eq_dag(spec_from_file)
 
-        if expected.name == 'callpath':
-            with open('/Users/gamblin2/a', 'w') as f:
-                f.write(expected.to_yaml())
-            with open('/Users/gamblin2/b', 'w') as f:
-                f.write(spec_from_file.to_yaml())
-
         assert expected.dag_hash() == spec_from_file.dag_hash()
 
         # Ensure directories are properly removed

@@ -86,13 +86,11 @@ class DefaultConcretizer(object):
         for cspec in candidates:
             if is_spec_buildable(cspec):
                 usable[cspec] = True
-                #usable.append(cspec)
 
             externals = spec_externals(cspec)
             for ext in externals:
                 if ext.satisfies(spec):
                     usable[ext] = True
-                    #usable.append(ext)
 
         # If nothing is in the usable list now, it's because we aren't
         # allowed to build anything.
@@ -147,26 +145,12 @@ class DefaultConcretizer(object):
         if spec.versions.concrete:
             return False
 
-        # If there are known available versions, return the most recent
-        # version that satisfies the spec
-        pkg = spec.package
-
-        # ---------- Produce prioritized list of versions
-        # Get list of preferences from packages.yaml
-        preferred = pkgsort()
-        # NOTE: pkgsort() == spack.package_prefs.PreferredPackages()
-
-        yaml_specs = [
-            x[0] for x in
-            preferred._spec_for_pkgname(spec.name, 'version', None)]
-        n = len(yaml_specs)
-        yaml_index = dict(
-            [(spc, n - index) for index, spc in enumerate(yaml_specs)])
-
         # List of versions we could consider, in sorted order
-        unsorted_versions = [
-            v for v in pkg.versions
-            if any(v.satisfies(sv) for sv in spec.versions)]
+        pkg = spec.package
+        usable = [v for v in pkg.versions
+                  if any(v.satisfies(sv) for sv in spec.versions)]
+
+        yaml_prefs = PackagePrefs(spec.name, 'version')
 
         # The keys below show the order of precedence of factors used
         # to select a version when concretizing.  The item with
@@ -174,12 +158,11 @@ class DefaultConcretizer(object):
         #
         # NOTE: When COMPARING VERSIONS, the '@develop' version is always
         #       larger than other versions.  BUT when CONCRETIZING,
-        #       the largest NON-develop version is selected by
-        #       default.
-        keys = [(
+        #       the largest NON-develop version is selected by default.
+        keyfn = lambda v: (
             # ------- Special direction from the user
             # Respect order listed in packages.yaml
-            yaml_index.get(v, -1),
+            -yaml_prefs(v),
 
             # The preferred=True flag (packages or packages.yaml or both?)
             pkg.versions.get(Version(v)).get('preferred', False),
@@ -194,15 +177,11 @@ class DefaultConcretizer(object):
             #    a) develop > everything (disabled by "not v.isdevelop() above)
             #    b) numeric > non-numeric
             #    c) Numeric or string comparison
-            v) for v in unsorted_versions]
-        keys.sort(reverse=True)
+            v)
+        usable.sort(key=keyfn, reverse=True)
 
-        # List of versions in complete sorted order
-        valid_versions = [x[-1] for x in keys]
-        # --------------------------
-
-        if valid_versions:
-            spec.versions = ver([valid_versions[0]])
+        if usable:
+            spec.versions = ver([usable[0]])
         else:
             # We don't know of any SAFE versions that match the given
             # spec.  Grab the spec's versions and grab the highest
