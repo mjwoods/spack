@@ -176,6 +176,24 @@ class PackagePrefs(object):
         """Whether specific package has a preferred vpkg providers."""
         return bool(cls._order_for_package(pkgname, 'providers', vpkg, False))
 
+    @classmethod
+    def preferred_variants(cls, pkg_name):
+        """Return a VariantMap of preferred variants/values for a spec."""
+        for pkg in (pkg_name, 'all'):
+            variants = cls._packages_config.get(pkg, {}).get('variants', '')
+            if variants:
+                break
+
+        # allow variants to be list or string
+        if not isinstance(variants, string_types):
+            variants = " ".join(variants)
+
+        # Only return variants that are actually supported by the package
+        pkg = spack.repo.get(pkg_name)
+        spec = spack.spec.Spec("%s %s" % (pkg_name, variants))
+        return dict((name, variant) for name, variant in spec.variants.items()
+                    if name in pkg.variants)
+
 
 class PreferredPackages(object):
     def __init__(self):
