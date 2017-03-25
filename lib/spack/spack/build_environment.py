@@ -323,8 +323,9 @@ def set_build_environment_variables(pkg, env, dirty=False):
         env.set('SPACK_COMPILER_EXTRA_RPATHS', extra_rpaths)
 
     # Add bin directories from dependencies to the PATH for the build.
-    bin_dirs = reversed(filter(os.path.isdir, [
-        '%s/bin' % d.prefix for d in pkg.spec.dependencies(deptype='build')]))
+    bin_dirs = reversed(
+        [d.prefix.bin for d in pkg.spec.dependencies(deptype='build')
+         if os.path.isdir(d.prefix.bin)])
     bin_dirs = filter_system_bin_paths(bin_dirs)
     for item in bin_dirs:
         env.prepend_path('PATH', item)

@@ -1315,7 +1315,7 @@ class Spec(object):
         else:
             yaml_text = syaml.dump(
                 self.to_node_dict(), default_flow_style=True, width=maxint)
-            sha = hashlib.sha1(yaml_text)
+            sha = hashlib.sha1(yaml_text.encode('utf-8'))
             b32_hash = base64.b32encode(sha.digest()).lower()
             if self.concrete:
                 self._hash = b32_hash

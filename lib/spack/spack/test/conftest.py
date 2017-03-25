@@ -182,6 +182,7 @@ def config(configuration_dir):
     spack.config.clear_config_caches()
     spack.package_prefs.PackagePrefs.clear_caches()
 
+
 @pytest.fixture(scope='module')
 def database(tmpdir_factory, builtin_mock, config):
     """Creates a mock database with some packages installed note that

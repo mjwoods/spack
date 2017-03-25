@@ -112,8 +112,6 @@ class TestConcretizePreferences(object):
 
         update_packages('all', 'providers', {'mpi': ['zmpi']})
         spec = concretize('mpileaks')
-
-        s = Spec('callpath').concretized()
         assert 'zmpi' in spec
 
     def test_develop(self):

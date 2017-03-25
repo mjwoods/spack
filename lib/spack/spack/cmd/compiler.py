@@ -171,7 +171,7 @@ def compiler_list(args):
     tty.msg("Available compilers")
     index = index_by(spack.compilers.all_compilers(scope=args.scope),
                      lambda c: (c.spec.name, c.operating_system, c.target))
-    ordered_sections = sorted(index.items(), key=lambda (k, v): k)
+    ordered_sections = sorted(index.items(), key=lambda item: item[0])
     for i, (key, compilers) in enumerate(ordered_sections):
         if i >= 1:
             print()
