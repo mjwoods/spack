@@ -96,6 +96,7 @@ specs to avoid ambiguity.  Both are provided because ~ can cause shell
 expansion when it is the first character in an id typed on the command line.
 """
 import base64
+import sys
 import collections
 import ctypes
 import hashlib
@@ -732,8 +733,7 @@ class FlagMap(HashableMap):
         return tuple((k, tuple(v)) for k, v in sorted(iteritems(self)))
 
     def __str__(self):
-        sorted_keys = filter(
-            lambda flag: self[flag] != [], sorted(self.keys()))
+        sorted_keys = [k for k in sorted(self.keys()) if self[k] != []]
         cond_symbol = ' ' if len(sorted_keys) > 0 else ''
         return cond_symbol + ' '.join(
             str(key) + '=\"' + ' '.join(
@@ -1316,7 +1316,11 @@ class Spec(object):
             yaml_text = syaml.dump(
                 self.to_node_dict(), default_flow_style=True, width=maxint)
             sha = hashlib.sha1(yaml_text.encode('utf-8'))
+
             b32_hash = base64.b32encode(sha.digest()).lower()
+            if sys.version_info[0] >= 3:
+                b32_hash = b32_hash.decode('utf-8')
+
             if self.concrete:
                 self._hash = b32_hash
             return b32_hash[:length]
