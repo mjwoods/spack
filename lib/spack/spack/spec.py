@@ -1797,6 +1797,8 @@ class Spec(object):
            dependency already in this spec.
         """
         assert(vdep.virtual)
+
+        # note that this defensively copies.
         providers = provider_index.providers_for(vdep)
 
         # If there is a provider for the vpkg, then use that instead of
@@ -1826,6 +1828,10 @@ class Spec(object):
                           provider_index):
         """Merge the dependency into this spec.
 
+        Caller should assume that this routine can owns the dep parameter
+        (i.e. it needs to be a copy of any internal structures like
+        dependencies on Package class objects).
+
         This is the core of normalize().  There are some basic steps:
 
           * If dep is virtual, evaluate whether it corresponds to an
@@ -1838,6 +1844,7 @@ class Spec(object):
             constraints into this spec.
 
         This method returns True if the spec was changed, False otherwise.
+
         """
         changed = False
 
@@ -1850,7 +1857,9 @@ class Spec(object):
                 dep = provider
         else:
             index = ProviderIndex([dep], restrict=True)
-            for vspec in (v for v in spec_deps.values() if v.virtual):
+            items = list(spec_deps.items())
+
+            for name, vspec in items:
                 if index.providers_for(vspec):
                     vspec._replace_with(dep)
                     del spec_deps[vspec.name]
@@ -1861,10 +1870,12 @@ class Spec(object):
                         raise UnsatisfiableProviderSpecError(required[0], dep)
             provider_index.update(dep)
 
-        # If the spec isn't already in the set of dependencies, clone
-        # it from the package description.
+        # If the spec isn't already in the set of dependencies, add it.
+        # Note: dep is always owned by this method. If it's from the
+        # caller, it's a copy from _evaluate_dependency_conditions. If it
+        # comes from a vdep, it's a defensive copy from _find_provider.
         if dep.name not in spec_deps:
-            spec_deps[dep.name] = dep.copy()
+            spec_deps[dep.name] = dep
             changed = True
         else:
             dspec = spec_deps[dep.name]
