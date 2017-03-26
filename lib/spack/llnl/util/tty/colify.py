@@ -25,6 +25,8 @@
 """
 Routines for printing columnar output.  See colify() for more information.
 """
+from __future__ import division
+
 import os
 import sys
 from six import StringIO
@@ -64,7 +66,7 @@ def config_variable_cols(elts, console_width, padding, cols=0):
     # Get a bound on the most columns we could possibly have.
     # 'clen' ignores length of ansi color sequences.
     lengths = [clen(e) for e in elts]
-    max_cols = max(1, console_width / (min(lengths) + padding))
+    max_cols = max(1, console_width // (min(lengths) + padding))
     max_cols = min(len(elts), max_cols)
 
     # Range of column counts to try.  If forced, use the supplied value.
@@ -75,7 +77,7 @@ def config_variable_cols(elts, console_width, padding, cols=0):
     for i, length in enumerate(lengths):
         for conf in configs:
             if conf.valid:
-                col = i / ((len(elts) + conf.cols - 1) / conf.cols)
+                col = i // ((len(elts) + conf.cols - 1) // conf.cols)
                 p = padding if col < (conf.cols - 1) else 0
 
                 if conf.widths[col] < (length + p):
@@ -107,7 +109,7 @@ def config_uniform_cols(elts, console_width, padding, cols=0):
     # 'clen' ignores length of ansi color sequences.
     max_len = max(clen(e) for e in elts) + padding
     if cols == 0:
-        cols = max(1, console_width / max_len)
+        cols = max(1, console_width // max_len)
         cols = min(len(elts), cols)
 
     config = ColumnConfig(cols)
@@ -193,7 +195,7 @@ def colify(elts, **options):
         raise ValueError("method must be one of: " + allowed_methods)
 
     cols = config.cols
-    rows = (len(elts) + cols - 1) / cols
+    rows = (len(elts) + cols - 1) // cols
     rows_last_col = len(elts) % rows
 
     for row in range(rows):
