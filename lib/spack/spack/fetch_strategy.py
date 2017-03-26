@@ -320,7 +320,7 @@ class URLFetchStrategy(FetchStrategy):
         # top-level directory.  We ignore hidden files to accomodate
         # these "semi-exploding" tarballs.
         files = os.listdir(tarball_container)
-        non_hidden = filter(lambda f: not f.startswith('.'), files)
+        non_hidden = [f for f in files if not f.startswith('.')]
         if len(non_hidden) == 1:
             expanded_dir = os.path.join(tarball_container, non_hidden[0])
             if os.path.isdir(expanded_dir):
