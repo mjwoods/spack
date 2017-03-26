@@ -1117,6 +1117,13 @@ class PackageBase(with_metaclass(PackageMeta, object)):
         finally:
             self.prefix_lock.release_write()
 
+    @contextlib.contextmanager
+    def _stage_and_write_lock(self):
+        """Prefix lock nested in a stage."""
+        with self.stage:
+            with self._prefix_write_lock():
+                yield
+
     def do_install(self,
                    keep_prefix=False,
                    keep_stage=False,
@@ -1235,7 +1242,7 @@ class PackageBase(with_metaclass(PackageMeta, object)):
 
             self.stage.keep = keep_stage
 
-            with contextlib.nested(self.stage, self._prefix_write_lock()):
+            with self._stage_and_write_lock():
                 # Run the pre-install hook in the child process after
                 # the directory is created.
                 spack.hooks.pre_install(self)
@@ -1267,9 +1274,10 @@ class PackageBase(with_metaclass(PackageMeta, object)):
                         input_stream=input_stream
                     )
                     with redirection_context as log_redirection:
-                        for phase_name, phase in zip(self.phases, self._InstallPhase_phases):  # NOQA: ignore=E501
+                        for phase_name, phase in zip(
+                                self.phases, self._InstallPhase_phases):
                             tty.msg(
-                                'Executing phase : \'{0}\''.format(phase_name)  # NOQA: ignore=E501
+                                'Executing phase : \'{0}\''.format(phase_name)
                             )
                             # Redirect stdout and stderr to daemon pipe
                             with log_redirection:
