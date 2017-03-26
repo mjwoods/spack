@@ -110,13 +110,13 @@ handling_spack = False
 for line in fileinput.input('spack.rst', inplace=1):
     if handling_spack:
         if not line.startswith('    :noindex:'):
-            print '    :noindex: %s' % ' '.join(spack.__all__)
+            print('    :noindex: %s' % ' '.join(spack.__all__))
         handling_spack = False
 
     if line.startswith('.. automodule::'):
         handling_spack = (line == '.. automodule:: spack\n')
 
-    print line,
+    sys.stdout.write(line)
 
 # Enable todo items
 todo_include_todos = True
