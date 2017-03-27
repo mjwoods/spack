@@ -581,8 +581,11 @@ class DependencySpec(object):
         self.deptypes = tuple(sorted(set(deptypes)))
 
     def update_deptypes(self, deptypes):
-        deptypes = tuple(sorted(set(deptypes)))
+        deptypes = set(deptypes)
+        deptypes.update(self.deptypes)
+        deptypes = tuple(sorted(deptypes))
         changed = self.deptypes != deptypes
+
         self.deptypes = deptypes
         return changed
 
@@ -1862,7 +1865,6 @@ class Spec(object):
         else:
             index = ProviderIndex([dep], restrict=True)
             items = list(spec_deps.items())
-
             for name, vspec in items:
                 if index.providers_for(vspec):
                     vspec._replace_with(dep)
@@ -1882,23 +1884,15 @@ class Spec(object):
             spec_deps[dep.name] = dep
             changed = True
         else:
-            dspec = spec_deps[dep.name]
-            if self.name not in dspec._dependents:
-                self._add_dependency(dspec, deptypes)
-            else:
-                dependent = dspec._dependents[self.name]
-                changed = dependent.update_deptypes(deptypes)
-
-        # Constrain package information with spec info
-        try:
-            changed |= spec_deps[dep.name].constrain(dep)
-
-        except UnsatisfiableSpecError as e:
-            e.message = "Invalid spec: '%s'. "
-            e.message += "Package %s requires %s %s, but spec asked for %s"
-            e.message %= (spec_deps[dep.name], dep.name,
-                          e.constraint_type, e.required, e.provided)
-            raise e
+            # merge package/vdep information into spec
+            try:
+                changed |= spec_deps[dep.name].constrain(dep)
+            except UnsatisfiableSpecError as e:
+                e.message = "Invalid spec: '%s'. "
+                e.message += "Package %s requires %s %s, but spec asked for %s"
+                e.message %= (spec_deps[dep.name], dep.name,
+                              e.constraint_type, e.required, e.provided)
+                raise e
 
         # Add merged spec to my deps and recurse
         dependency = spec_deps[dep.name]
@@ -2108,6 +2102,9 @@ class Spec(object):
         changed = False
         for name in self.common_dependencies(other):
             changed |= self[name].constrain(other[name], deps=False)
+            if name in self._dependencies:
+                changed |= self._dependencies[name].update_deptypes(
+                    other._dependencies[name].deptypes)
 
         # Update with additional constraints from other spec
         for name in other.dep_difference(self):
