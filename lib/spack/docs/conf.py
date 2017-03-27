@@ -51,6 +51,10 @@ from sphinx.apidoc import main as sphinx_apidoc
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('exts'))
 sys.path.insert(0, os.path.abspath('../external'))
+if sys.version_info[0] < 3:
+    sys.path.insert(0, os.path.abspath('../external/yaml/lib'))
+else:
+    sys.path.insert(0, os.path.abspath('../external/yaml/lib3'))
 sys.path.append(os.path.abspath('..'))
 
 # Add the Spack bin directory to the path so that we can use its output in docs.
