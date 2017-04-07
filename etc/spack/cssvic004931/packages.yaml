@@ -1,0 +1,6 @@
+packages:
+    openssl:
+        paths:
+            openssl@1.0.1e: /usr
+        buildable: False
+
