@@ -1,0 +1,32 @@
+packages:
+  openssl:
+    paths:
+      openssl@0.9.8j: /usr
+    buildable: False
+  mpich:
+    modules:
+      mpich@7.5.2%gcc@6.3.0: cray-mpich/7.5.2
+      mpich@7.5.2%intel@17.0.1.132: cray-mpich/7.5.2
+    buildable: False
+  netcdf:
+    modules:
+      netcdf@4.4.1.1%gcc@6.3.0: cray-netcdf/4.4.1.1
+      netcdf@4.4.1.1%intel@17.0.1.132: cray-netcdf/4.4.1.1
+    buildable: False
+  hdf5:
+    modules:
+      hdf5@1.8.16+szip%gcc@6.3.0: cray-hdf5/1.8.16
+      hdf5@1.8.16+szip%intel@17.0.1.132: cray-hdf5/1.8.16
+    buildable: False
+  intel-mkl:
+    modules:
+      intel-mkl@2017.1.132%intel@17.0.1.132: intel/17.0.1.132
+    paths:
+      intel-mkl@2017.1.132%gcc@6.3.0: /opt/intel/compilers_and_libraries_2017.1.132/linux/mkl 
+    buildable: False
+  all:
+    compiler: [gcc@6.3.0, intel/17.0.1.132]
+    providers:
+      blas: [intel-mkl]
+      lapack: [intel-mkl]
+      mpi: [mpich]
