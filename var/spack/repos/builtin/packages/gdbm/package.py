@@ -35,14 +35,11 @@ class Gdbm(AutotoolsPackage):
     homepage = "http://www.gnu.org.ua/software/gdbm/gdbm.html"
     url      = "ftp://ftp.gnu.org/gnu/gdbm/gdbm-1.13.tar.gz"
 
-    version('1.13', '8929dcda2a8de3fd2367bdbf66769376')
+    version('1.13',  '8929dcda2a8de3fd2367bdbf66769376')
+    version('1.12',  '9ce96ff4c99e74295ea19040931c8fb9')
+    version('1.11',  '72c832680cf0999caedbe5b265c8c1bd')
+    version('1.10',  '88770493c2559dc80b561293e39d3570')
+    version('1.9.1', '59f6e4c4193cb875964ffbe8aa384b58')
+    version('1.9',   '1f0e8e6691edd61bdd6b697b8c02528d')
     version('1.8.3', '1d1b1d5c0245b1c00aff92da751e9aa1')
 
-    # FIXME: Add dependencies if required.
-    # depends_on('foo')
-
-    #def configure_args(self):
-        # FIXME: Add arguments other than --prefix
-        # FIXME: If not needed delete this function
-        #args = []
-        #return args
