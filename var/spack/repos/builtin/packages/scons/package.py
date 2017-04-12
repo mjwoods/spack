@@ -31,3 +31,6 @@ class Scons(PythonPackage):
     url      = "http://downloads.sourceforge.net/project/scons/scons/2.5.0/scons-2.5.0.tar.gz"
 
     version('2.5.0', '9e00fa0df8f5ca5c5f5975b40e0ed354')
+
+    depends_on('python@2', type=('build', 'run'))
+
