@@ -36,6 +36,7 @@ class Gdbm(AutotoolsPackage):
     url      = "ftp://ftp.gnu.org/gnu/gdbm/gdbm-1.13.tar.gz"
 
     version('1.13', '8929dcda2a8de3fd2367bdbf66769376')
+    version('1.8.3', '1d1b1d5c0245b1c00aff92da751e9aa1')
 
     # FIXME: Add dependencies if required.
     # depends_on('foo')
