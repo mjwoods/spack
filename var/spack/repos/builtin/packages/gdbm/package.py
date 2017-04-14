@@ -41,5 +41,7 @@ class Gdbm(AutotoolsPackage):
     version('1.10',  '88770493c2559dc80b561293e39d3570')
     version('1.9.1', '59f6e4c4193cb875964ffbe8aa384b58')
     version('1.9',   '1f0e8e6691edd61bdd6b697b8c02528d')
-    version('1.8.3', '1d1b1d5c0245b1c00aff92da751e9aa1')
+
+    def configure_args(self):
+        return ['--enable-libgdbm-compat']
 
