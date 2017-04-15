@@ -3,20 +3,29 @@ packages:
     paths:
       openssl@0.9.8j: /usr
     buildable: False
+  gdbm:
+    version: [1.12]
+  gettext:
+    # Fails to build gettext@0.19.8.1+libxml2:
+    variants: ~libxml2
+  perl:
+    variants: +gdbm
   mpich:
     modules:
-      mpich@7.5.2%gcc@6.3.0: cray-mpich/7.5.2
-      mpich@7.5.2%intel@17.0.1.132: cray-mpich/7.5.2
+      mpich@7.5.2%gcc@6.3.0: cray-mpich
+      mpich@7.5.2%intel@17.0.1.132: cray-mpich
     buildable: False
   netcdf:
     modules:
-      netcdf@4.4.1.1%gcc@6.3.0: cray-netcdf/4.4.1.1
-      netcdf@4.4.1.1%intel@17.0.1.132: cray-netcdf/4.4.1.1
+      netcdf@4.4.1.1%gcc@6.3.0: cray-netcdf-hdf5parallel
+      netcdf@4.4.1.1%intel@17.0.1.132: cray-netcdf-hdf5parallel
+    variants: +mpi
     buildable: False
   hdf5:
     modules:
-      hdf5@1.8.16+szip%gcc@6.3.0: cray-hdf5/1.8.16
-      hdf5@1.8.16+szip%intel@17.0.1.132: cray-hdf5/1.8.16
+      hdf5@1.8.16 %gcc@6.3.0: cray-hdf5-parallel
+      hdf5@1.8.16 %intel@17.0.1.132: cray-hdf5-parallel
+    variants: +mpi+szip
     buildable: False
   intel-mkl:
     modules:
