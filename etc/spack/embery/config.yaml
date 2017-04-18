@@ -16,7 +16,7 @@
 config:
   # This is the path to the root of the Spack install tree.
   # You can use $spack here to refer to the root of the spack instance.
-  install_tree: /g/ns/rd/rdshare/spack/opt
+  install_tree: /g/ns/rd/rdshare/spack/rhel6/opt
 
 
   # Locations where different types of modules should be installed.
