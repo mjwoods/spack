@@ -25,11 +25,14 @@
 from spack import *
 
 
-class LibjsonC(AutotoolsPackage):
-    """ A JSON implementation in C """
-    homepage = "https://github.com/json-c/json-c/wiki"
-    url      = "https://s3.amazonaws.com/json-c_releases/releases/json-c-0.11.tar.gz"
+class PyPytestRunner(PythonPackage):
+    """Invoke py.test as distutils command with dependency resolution."""
 
-    parallel = False
+    homepage = "https://github.com/pytest-dev/pytest-runner"
+    url      = "https://pypi.io/packages/source/p/pytest-runner/pytest-runner-2.11.1.tar.gz"
 
-    version('0.11', 'aa02367d2f7a830bf1e3376f77881e98')
+    import_modules = ['ptr']
+
+    version('2.11.1', 'bdb73eb18eca2727944a2dcf963c5a81')
+
+    depends_on('py-setuptools', type='build')
