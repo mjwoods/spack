@@ -1,8 +1,9 @@
 packages:
-  openssl:
-    paths:
-      openssl@0.9.8j: /usr
-    buildable: False
+  # Comment out for now; system packages break spack build environment
+  #openssl:
+  #  paths:
+  #    openssl@0.9.8j: /usr
+  #  buildable: False
   gdbm:
     version: [1.12]
   gettext:
