@@ -61,6 +61,8 @@ class Qt(Package):
             description="Build with D-Bus support.")
     variant('phonon',     default=False,
             description="Build with phonon support.")
+    variant('x11', default=True if sys.platform != 'darwin' else False,
+            description="Build with X11 support.")
 
     patch('qt3krell.patch', when='@3.3.8b+krellpatch')
 
@@ -89,14 +91,43 @@ class Qt(Package):
     depends_on("python", when='@5.7.0:', type='build')
 
     # OpenGL hardware acceleration
-    depends_on("mesa", when='@4:+mesa')
-    depends_on("libxcb", when=sys.platform != 'darwin')
+    depends_on("mesa", when='+mesa')
 
     # Webkit
     depends_on("flex", when='+webkit', type='build')
     depends_on("bison", when='+webkit', type='build')
     depends_on("gperf", when='+webkit')
     depends_on("fontconfig", when='+webkit')
+
+    # X11 build requirements based on:
+    #   http://doc.qt.io/qt-4.8/requirements-x11.html
+    #   http://doc.qt.io/qt-5/linux-requirements.html
+    # Some of these packages may not be needed in certain qt builds,
+    # but installing and building with them should be harmless.
+    depends_on("libxrender", when='+x11')
+    depends_on("libxrandr", when='+x11')
+    depends_on("libxcursor", when='+x11')
+    depends_on("libxfixes", when='+x11')
+    depends_on("libxinerama", when='+x11')
+    depends_on("fontconfig", when='+x11')
+    depends_on("freetype", when='+x11')
+    depends_on("libxi", when='+x11')
+    depends_on("libxt", when='+x11')
+    depends_on("libxext", when='+x11')
+    depends_on("libx11", when='+x11')
+    depends_on("libsm", when='+x11')
+    depends_on("libice", when='+x11')
+    depends_on("libxft", when='+x11')
+
+    depends_on("libxcb", when='@5:+x11')
+    depends_on("xcb-util-image", when='@5:+x11')
+    depends_on("xcb-util-keysyms", when='@5:+x11')
+    depends_on("xcb-util-renderutil", when='@5:+x11')
+    depends_on("xcb-util-wm", when='@5:+x11')
+
+    # qt-5.7 requires a compiler that complies with the c++-11 standard.
+    # gcc-4.7 supports some of the standard; later versions are preferred.
+    conflicts("%gcc@:4.7", when='@5.7:')
 
     # Multimedia
     # depends_on("gstreamer", when='+multimedia')
