@@ -119,6 +119,7 @@ class Qt(Package):
     depends_on("libsm", when='+x11')
     depends_on("libice", when='+x11')
     depends_on("libxft", when='+x11')
+    depends_on("libxv", when='+x11')
 
     depends_on("libxcb", when='@5:+x11')
     depends_on("xcb-util-image", when='@5:+x11')
