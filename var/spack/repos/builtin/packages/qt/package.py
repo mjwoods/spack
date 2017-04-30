@@ -312,13 +312,21 @@ class Qt(Package):
             os.environ['LD_LIBRARY_PATH'] += os.pathsep + os.getcwd() + '/lib'
         else:
             os.environ['LD_LIBRARY_PATH'] = os.pathsep + os.getcwd() + '/lib'
-
+        spec = self.spec
+        libs = []
+        if spec.satisfies('+x11'):
+            libs += ['libsm', 'libxext', 'libxinerama', 'libxcursor',
+                     'libxrandr', 'randrproto', 'libxrender',
+                     'libx11', 'libxft', 'freetype', 'fontconfig']
+        args = map(lambda lib: "-I%s" % spec[lib].prefix.include, libs) \
+               + map(lambda lib: "-L%s" % spec[lib].prefix.lib, libs)
         configure('-prefix', self.prefix,
                   '-v',
                   '-thread',
                   '-shared',
                   '-release',
-                  '-fast')
+                  '-fast',
+                  *args)
 
     @when('@4')
     def configure(self):
