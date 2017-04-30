@@ -344,10 +344,11 @@ class Qt(Package):
     @when('@5.0:5.6')
     def configure(self):
         webkit_args = [] if '+webkit' in self.spec else ['-skip', 'qtwebkit']
+        gcc_args =  ['-no-c++11'] if '%gcc@:4.7' in self.spec else []
         configure('-no-eglfs',
                   '-no-directfb',
                   '-{0}gtkstyle'.format('' if '+gtk' in self.spec else 'no-'),
-                  *(webkit_args + self.common_config_args))
+                  *(gcc_args + webkit_args + self.common_config_args))
 
     @when('@5.7:')
     def configure(self):
