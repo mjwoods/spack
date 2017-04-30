@@ -1,0 +1,39 @@
+--- qt-x11-free-3.3.8b/config.tests/x11/xrandr.test	2017-04-30 09:59:21.758658379 +1000
++++ qt-x11-free-3.3.8b-fixes/config.tests/x11/xrandr.test	2017-04-30 11:32:52.279134110 +1000
+@@ -52,20 +52,33 @@
+     XDIRS=`sed -n -e '/^QMAKE_INCDIR_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
+     INCDIRS="$IN_INCDIRS $XDIRS /usr/include /include"
+     F=
++    F2=
+     for INCDIR in $INCDIRS; do
+-	if [ -f $INCDIR/$INC -a -f $INCDIR/$INC2 ]; then
++	if [ -f $INCDIR/$INC -a -z "$F" ]; then
+ 	    F=yes
+ 	    XRANDR_H=$INCDIR/$INC
+-	    RANDR_H=$INCDIR/$INC2
+ 	    [ "$VERBOSE" = "yes" ] && echo "  Found $INC in $INCDIR"
+-	    break
++	fi
++
++	if [ -f $INCDIR/$INC2 -a -z "$F2" ]; then
++	    F2=yes
++	    RANDR_H=$INCDIR/$INC2
++	    [ "$VERBOSE" = "yes" ] && echo "  Found $INC2 in $INCDIR"
+ 	fi
+     done
++
+     if [ -z "$F" ]
+     then
+ 	XRANDR=no
+ 	[ "$VERBOSE" = "yes" ] && echo "  Could not find $INC anywhere in $INCDIRS"
+     fi
++
++    if [ -z "$F2" ]
++    then
++	XRANDR=no
++	[ "$VERBOSE" = "yes" ] && echo "  Could not find $INC2 anywhere in $INCDIRS"
++    fi
++
+ fi
+ 
+ # verify that we are using XRandR 1.x >= 1.1

@@ -66,6 +66,7 @@ class Qt(Package):
 
     patch('qt3accept.patch', when='@3.3.8b')
     patch('qt3krell.patch', when='@3.3.8b+krellpatch')
+    patch('qt3xrandr.patch', when='@3.3.8b+x11')
 
     # https://github.com/xboxdrv/xboxdrv/issues/188
     patch('btn_trigger_happy.patch', when='@5.7.0:')
