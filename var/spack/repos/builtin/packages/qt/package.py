@@ -64,6 +64,7 @@ class Qt(Package):
     variant('x11', default=True if sys.platform != 'darwin' else False,
             description="Build with X11 support.")
 
+    patch('qt3accept.patch', when='@3.3.8b')
     patch('qt3krell.patch', when='@3.3.8b+krellpatch')
 
     # https://github.com/xboxdrv/xboxdrv/issues/188
