@@ -94,6 +94,8 @@ class Qt(Package):
 
     # OpenGL hardware acceleration
     depends_on("mesa", when='+mesa')
+    depends_on("mesa-glu", when='@3+mesa')
+    depends_on("libxmu", when='@3+mesa')
 
     # Webkit
     depends_on("flex", when='+webkit', type='build')
@@ -300,6 +302,8 @@ class Qt(Package):
             libs += ['libsm', 'libxext', 'libxinerama', 'libxcursor',
                      'libxrandr', 'randrproto', 'libxrender',
                      'libx11', 'libxft', 'freetype', 'fontconfig']
+        if spec.satisfies('+mesa'):
+             libs += ['mesa', 'mesa-glu', 'libxmu']
         args = map(lambda lib: "-I%s" % spec[lib].prefix.include, libs) \
                + map(lambda lib: "-L%s" % spec[lib].prefix.lib, libs)
         configure('-prefix', self.prefix,
