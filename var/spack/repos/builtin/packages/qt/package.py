@@ -94,8 +94,8 @@ class Qt(Package):
 
     # OpenGL hardware acceleration
     depends_on("mesa", when='+mesa')
-    depends_on("mesa-glu", when='@3+mesa')
-    depends_on("libxmu", when='@3+mesa')
+    depends_on("mesa-glu", when='+mesa')
+    depends_on("libxmu", when='+mesa')
 
     # Webkit
     depends_on("flex", when='+webkit', type='build')
