@@ -91,6 +91,7 @@ class Qt(Package):
     depends_on("libmng")
     depends_on("jpeg")
     depends_on("icu4c")
+    depends_on("harfbuzz", when='@5:')
 
     # QtQml
     depends_on("python", when='@5.7.0:', type='build')
