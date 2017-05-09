@@ -339,11 +339,6 @@ class Qt(Package):
     def configure(self):
         config_args = self.common_config_args
 
-        if not sys.platform == 'darwin':
-            config_args.extend([
-                '-qt-xcb',
-            ])
-
         if '~webkit' in self.spec:
             config_args.extend([
                 '-skip', 'webengine',
