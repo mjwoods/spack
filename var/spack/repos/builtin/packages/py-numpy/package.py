@@ -138,9 +138,6 @@ class PyNumpy(PythonPackage):
                     f.write('libraries=%s\n'    % names)
 
                 f.write('library_dirs=%s\n' % dirs)
-                if not ((platform.system() == "Darwin") and
-                        (platform.mac_ver()[0] == '10.12')):
-                    f.write('rpath=%s\n' % dirs)
 
     def build_args(self, spec, prefix):
         args = []
