@@ -229,6 +229,13 @@ fi
 input_command="$@"
 args=("$@")
 
+# Some simplistic build systems assume that rpath can be set with -R options.
+# These do not work with gnu and intel compilers.
+# We try to translate them so that options are passed to the linker:
+if [[ "$SPACK_COMPILER_SPEC" =~ "gcc" || "$SPACK_COMPILER_SPEC" =~ "intel" ]]; then
+  args=("${args[@]/#-R/-Wl,-rpath,}")
+fi
+
 # Prepend cppflags, cflags, cxxflags, fcflags, fflags, and ldflags
 
 # Add ldflags
