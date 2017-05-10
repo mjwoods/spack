@@ -47,9 +47,10 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
     # Maintenance releases (recommended)
     version('5.24.1', '765ef511b5b87a164e2531403ee16b3c', preferred=True)
     version('5.22.3', 'aa4f236dc2fc6f88b871436b8d0fda95')
-    
+
     # Misc releases that people need
     version('5.22.2', '5767e2a10dd62a46d7b57f74a90d952b')
+    version('5.22.1', '19295bbb775a3c36123161b9bf4892f1')
 
     # End of life releases
     version('5.20.3', 'd647d0ea5a7a8194c34759ab9f2610cd')
@@ -58,12 +59,7 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
 
     extendable = True
 
-    # Many systems provide a dbm library, which is detected during
-    # installation of perl. But it may be missing or buggy on some systems,
-    # so we provide a way to link with a spack gdbm package.
-    variant('gdbm', default=False,
-            description='Optionally use spack gdbm for ODBM_File package')
-    depends_on('gdbm', when='+gdbm')
+    depends_on('gdbm')
 
     # Installing cpanm alongside the core makes it safe and simple for
     # people/projects to install their own sets of perl modules.  Not
@@ -88,7 +84,9 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
 
         config_args = [
             '-des',
-            '-Dprefix={0}'.format(prefix)
+            '-Dprefix={0}'.format(prefix),
+            '-Dlocincpth=' + self.spec['gdbm'].prefix.include,
+            '-Dloclibpth=' + self.spec['gdbm'].prefix.lib
         ]
 
         # Discussion of -fPIC for Intel at:
@@ -105,6 +103,7 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
     def build(self, spec, prefix):
         make()
 
+    @run_after('build')
     @on_package_attributes(run_tests=True)
     def test(self):
         make('test')
@@ -115,11 +114,10 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
     @run_after('install')
     def install_cpanm(self):
         spec = self.spec
-        prefix = self.prefix
 
         if '+cpanm' in spec:
             with working_dir(join_path('cpanm', 'cpanm')):
-                perl = Executable(join_path(prefix.bin, 'perl'))
+                perl = spec['perl'].command
                 perl('Makefile.PL')
                 make()
                 make('install')

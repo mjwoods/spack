@@ -27,61 +27,41 @@ from spack import *
 
 
 class Eccodes(CMakePackage):
-    """ecCodes is a package developed by ECMWF which provides an application
-    programming interface and a set of tools for decoding and encoding
-    messages in the following formats:
-
-      WMO FM-92 GRIB edition 1 and edition 2
-      WMO FM-94 BUFR edition 3 and edition 4 
-      WMO GTS abbreviated header (only decoding).
-    """
+    """ecCodes is a package developed by ECMWF for processing meteorological
+    data in GRIB (1/2), BUFR (3/4) and GTS header formats."""
 
     homepage = "https://software.ecmwf.int/wiki/display/ECC/ecCodes+Home"
     url      = "https://software.ecmwf.int/wiki/download/attachments/45757960/eccodes-2.2.0-Source.tar.gz?api=v2"
+    list_url = "https://software.ecmwf.int/wiki/display/ECC/Releases"
 
     version('2.2.0', 'b27e6f0a3eea5b92dac37372e4c45a62')
 
-    variant('netcdf', default=True)
-    variant('openjpeg', default=True)
-    variant('libpng', default=True)
-    variant('python', default=False)
-    variant('pthreads', default=False)
-    variant('openmp', default=False)
-    variant('memfs', default=False)
+    variant('netcdf', default=True,
+            description="Support GRIB to NetCDF conversion")
+    variant('jpeg', default=True,
+            description="Support JPEG2000 encoding/decoding")
+    variant('png', default=True,
+            description="Support PNG encoding/decoding")
+    variant('python', default=False,
+            description="Build the eccodes Python interface")
+    variant('pthreads', default=False,
+            description="Enable POSIX threads")
+    variant('openmp', default=False,
+            description="Enable OpenMP threads")
+    variant('memfs', default=False,
+            description="Memory based access to definitions/samples")
 
     depends_on('netcdf', when='+netcdf')
-    depends_on('openjpeg', when='+openjpeg')
-    depends_on('libpng', when='+libpng')
+    depends_on('openjpeg', when='+jpeg')
+    depends_on('libpng', when='+png')
+    depends_on('py-numpy', when='+python')
     extends('python', when='+python')
 
     def cmake_args(self):
-        args = []
-        if self.spec.satisfies('+netcdf'):
-            args.append('-DENABLE_NETCDF=ON')
-        else:
-            args.append('-DENABLE_NETCDF=OFF')
-        if self.spec.satisfies('+openjpeg'):
-            args.append('-DENABLE_JPG=ON')
-        else:
-            args.append('-DENABLE_JPG=OFF')
-        if self.spec.satisfies('+libpng'):
-            args.append('-DENABLE_PNG=ON')
-        else:
-            args.append('-DENABLE_PNG=OFF')
-        if self.spec.satisfies('+python'):
-            args.append('-DENABLE_PYTHON=ON')
-        else:
-            args.append('-DENABLE_PYTHON=OFF')
-        if self.spec.satisfies('+pthreads'):
-            args.append('-DENABLE_ECCODES_THREADS=ON')
-        else:
-            args.append('-DENABLE_ECCODES_THREADS=OFF')
-        if self.spec.satisfies('+openmp'):
-            args.append('-DENABLE_ECCODES_OMP_THREADS=ON')
-        else:
-            args.append('-DENABLE_ECCODES_OMP_THREADS=OFF')
-        if self.spec.satisfies('+memfs'):
-            args.append('-DENABLE_MEMFS=ON')
-        else:
-            args.append('-DENABLE_MEMFS=OFF')
-        return args
+        variants = ['+netcdf', '+jpeg', '+png', '+python',
+                    '+pthreads', '+openmp', '+memfs']
+        options = ['NETCDF', 'JPG', 'PNG', 'PYTHON',
+                   'ECCODES_THREADS', 'ECCODES_OMP_THREADS', 'MEMFS']
+        return map(lambda variant, option: "-DENABLE_%s=%s" %
+                   (option, 'YES' if variant in self.spec else 'NO'),
+                   variants, options)

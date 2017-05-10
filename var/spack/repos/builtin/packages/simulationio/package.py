@@ -29,7 +29,7 @@ from spack import *
 class Simulationio(CMakePackage):
     """SimulationIO: Efficient and convenient I/O for large PDE simulations"""
     homepage = "https://github.com/eschnett/SimulationIO"
-    url= "https://github.com/eschnett/SimulationIO/archive/version/0.1.0.tar.gz"
+    url      = "https://github.com/eschnett/SimulationIO/archive/version/0.1.0.tar.gz"
 
     version('1.0.0', '5cbf1d0084eb436d861ffcdd297eaa08')
     version('0.1.0', '00f7dabc08ed1ab77858785ce0809f50')
@@ -42,10 +42,11 @@ class Simulationio(CMakePackage):
     variant('pic', default=True,
             description="Produce position-independent code")
 
+    depends_on('hdf5 +cxx @:1.10.0-patch1')
     depends_on('julia', when='+julia', type=('build', 'run'))
     depends_on('py-h5py', when='+python', type=('build', 'run'))
     depends_on('py-numpy', when='+python', type=('build', 'run'))
-    depends_on('python@2.7.0:2.999.999', when='+python', type=('build', 'run'))
+    depends_on('python@2.7:2.8', when='+python', type=('build', 'run'))
     depends_on('swig', type='build')
 
     extends('python')

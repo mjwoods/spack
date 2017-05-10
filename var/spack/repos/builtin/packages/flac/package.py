@@ -22,13 +22,18 @@
 # License along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##############################################################################
-
-description = "run pydoc from within spack"
-
-
-def setup_parser(subparser):
-    subparser.add_argument('entity', help="run pydoc help on entity")
+from spack import *
 
 
-def doc(parser, args):
-    help(args.entity)
+class Flac(AutotoolsPackage):
+    """Encoder/decoder for the Free Lossless Audio Codec"""
+
+    homepage = "https://xiph.org/flac/index.html"
+    url      = "http://downloads.xiph.org/releases/flac/flac-1.3.2.tar.xz"
+
+    version('1.3.2', '454f1bfa3f93cc708098d7890d0499bd')
+    version('1.3.1', 'b9922c9a0378c88d3e901b234f852698')
+    version('1.3.0', '13b5c214cee8373464d3d65dee362cdd')
+
+    depends_on('libvorbis')
+    depends_on('id3lib')
