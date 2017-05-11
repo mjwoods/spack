@@ -42,12 +42,38 @@ class Pcre(AutotoolsPackage):
     variant('utf', default=True,
             description='Enable support for UTF-8/16/32, '
             'incompatible with EBCDIC.')
+    variant('pcre16', default=True,
+            description='Build 16 bit pcre library.')
+    variant('pcre32', default=True,
+            description='Build 32 bit pcre library.')
+    variant('jit', default=True,
+            description='Support just-in-time compilation')
+    variant('zlib', default=True,
+            description='Link pcregrep with libz to handle .gz files')
+    variant('bzip2', default=True,
+            description='Link pcregrep with libbz2 to handle .bz2 files')
+    variant('readline', default=True,
+            description='Link pcretest program to readline')
+
+    depends_on('zlib', when='+zlib')
+    depends_on('bzip2', when='+bzip2')
+    depends_on('readline', when='+readline')
 
     def configure_args(self):
         args = []
-
         if '+utf' in self.spec:
             args.append('--enable-utf')
             args.append('--enable-unicode-properties')
-
+        if '+pcre16' in self.spec:
+            args.append('--enable-pcre16')
+        if '+pcre32' in self.spec:
+            args.append('--enable-pcre32')
+        if '+jit' in self.spec:
+            args.append('--enable-jit')
+        if '+zlib' in self.spec:
+            args.append('--enable-pcregrep-libz')
+        if '+bzip2' in self.spec:
+            args.append('--enable-pcregrep-libbz2')
+        if '+readline' in self.spec:
+            args.append('--enable-pcretest-libreadline')
         return args
