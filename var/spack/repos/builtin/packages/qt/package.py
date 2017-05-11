@@ -65,6 +65,7 @@ class Qt(Package):
             description="Build with X11 support.")
 
     patch('qt3accept.patch', when='@3.3.8b')
+    patch('qt3cstddef.patch', when='@3.3.8b')
     patch('qt3krell.patch', when='@3.3.8b+krellpatch')
     patch('qt3xrandr.patch', when='@3.3.8b+x11')
 
