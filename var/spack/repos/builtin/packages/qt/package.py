@@ -62,8 +62,12 @@ class Qt(Package):
             description="Build with D-Bus support.")
     variant('phonon',     default=False,
             description="Build with phonon support.")
+    variant('x11', default=True if sys.platform != 'darwin' else False,
+            description="Build with X11 support.")
 
+    patch('qt3accept.patch', when='@3.3.8b')
     patch('qt3krell.patch', when='@3.3.8b+krellpatch')
+    patch('qt3xrandr.patch', when='@3.3.8b+x11')
 
     # see https://bugreports.qt.io/browse/QTBUG-57656
     patch('QTBUG-57656.patch', when='@5.8.0')
@@ -79,7 +83,10 @@ class Qt(Package):
 
     # Use system openssl for security.
     depends_on("openssl")
-    depends_on("glib", when='@4:')
+
+    # Use glib without pcre dependency.
+    depends_on("glib@2.42.1", when='@4:')
+
     depends_on("gtkplus", when='+gtk')
     depends_on("libxml2")
     depends_on("zlib")
@@ -90,23 +97,52 @@ class Qt(Package):
     depends_on("libmng")
     depends_on("jpeg")
     depends_on("icu4c")
-    # FIXME:
-    # depends_on("freetype", when='@5.8:') and '-system-freetype'
-    # -system-harfbuzz
-    # -system-pcre
+    depends_on("harfbuzz", when='@5:')
 
     # QtQml
     depends_on("python", when='@5.7.0:', type='build')
 
     # OpenGL hardware acceleration
-    depends_on("mesa", when='@4:+mesa')
-    depends_on("libxcb", when=sys.platform != 'darwin')
+    depends_on("mesa", when='+mesa')
+    depends_on("mesa-glu", when='+mesa')
+    depends_on("libxmu", when='+mesa')
 
     # Webkit
     depends_on("flex", when='+webkit', type='build')
     depends_on("bison", when='+webkit', type='build')
     depends_on("gperf", when='+webkit')
     depends_on("fontconfig", when='+webkit')
+
+    # X11 build requirements based on:
+    #   http://doc.qt.io/qt-4.8/requirements-x11.html
+    #   http://doc.qt.io/qt-5/linux-requirements.html
+    # Some of these packages may not be needed in certain qt builds,
+    # but installing and building with them should be harmless.
+    depends_on("libxrender", when='+x11')
+    depends_on("libxrandr", when='+x11')
+    depends_on("libxcursor", when='+x11')
+    depends_on("libxfixes", when='+x11')
+    depends_on("libxinerama", when='+x11')
+    depends_on("fontconfig", when='+x11')
+    depends_on("freetype", when='+x11')
+    depends_on("libxi", when='+x11')
+    depends_on("libxt", when='+x11')
+    depends_on("libxext", when='+x11')
+    depends_on("libx11", when='+x11')
+    depends_on("libsm", when='+x11')
+    depends_on("libice", when='+x11')
+    depends_on("libxft", when='+x11')
+    depends_on("libxv", when='+x11')
+
+    depends_on("libxcb", when='@5:+x11')
+    depends_on("xcb-util-image", when='@5:+x11')
+    depends_on("xcb-util-keysyms", when='@5:+x11')
+    depends_on("xcb-util-renderutil", when='@5:+x11')
+    depends_on("xcb-util-wm", when='@5:+x11')
+
+    # qt-5.7 requires a compiler that complies with the c++-11 standard.
+    # gcc-4.7 supports some of the standard; later versions are preferred.
+    conflicts("%gcc@:4.7", when='@5.7:')
 
     # Multimedia
     # depends_on("gstreamer", when='+multimedia')
@@ -279,13 +315,23 @@ class Qt(Package):
             os.environ['LD_LIBRARY_PATH'] += os.pathsep + os.getcwd() + '/lib'
         else:
             os.environ['LD_LIBRARY_PATH'] = os.pathsep + os.getcwd() + '/lib'
-
+        spec = self.spec
+        libs = []
+        if spec.satisfies('+x11'):
+            libs += ['libsm', 'libxext', 'libxinerama', 'libxcursor',
+                     'libxrandr', 'randrproto', 'libxrender',
+                     'libx11', 'libxft', 'freetype', 'fontconfig']
+        if spec.satisfies('+mesa'):
+             libs += ['mesa', 'mesa-glu', 'libxmu']
+        args = map(lambda lib: "-I%s" % spec[lib].prefix.include, libs) \
+               + map(lambda lib: "-L%s" % spec[lib].prefix.lib, libs)
         configure('-prefix', self.prefix,
                   '-v',
                   '-thread',
                   '-shared',
                   '-release',
-                  '-fast')
+                  '-fast',
+                  *args)
 
     @when('@4')
     def configure(self):
@@ -298,19 +344,15 @@ class Qt(Package):
     @when('@5.0:5.6')
     def configure(self):
         webkit_args = [] if '+webkit' in self.spec else ['-skip', 'qtwebkit']
+        gcc_args =  ['-no-c++11'] if '%gcc@:4.7' in self.spec else []
         configure('-no-eglfs',
                   '-no-directfb',
                   '-{0}gtkstyle'.format('' if '+gtk' in self.spec else 'no-'),
-                  *(webkit_args + self.common_config_args))
+                  *(gcc_args + webkit_args + self.common_config_args))
 
     @when('@5.7:')
     def configure(self):
         config_args = self.common_config_args
-
-        if not sys.platform == 'darwin':
-            config_args.extend([
-                '-qt-xcb',
-            ])
 
         if '~webkit' in self.spec:
             config_args.extend([
