@@ -6,9 +6,9 @@ compilers:
     modules: []
     operating_system: rhel6
     paths:
-      cc: /appsfs/opt/Modules/wrappers/trunk/gcc
-      cxx: /appsfs/opt/Modules/wrappers/trunk/g++
-      f77: /appsfs/opt/Modules/wrappers/trunk/gfortran
-      fc: /appsfs/opt/Modules/wrappers/trunk/gfortran
+      cc: /usr/bin/gcc
+      cxx: /usr/bin/g++
+      f77: /usr/bin/gfortran
+      fc: /usr/bin/gfortran
     spec: gcc@4.4.7
     target: x86_64

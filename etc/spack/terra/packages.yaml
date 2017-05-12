@@ -35,7 +35,7 @@ packages:
   #    intel-mkl@2017.1.132%gcc@6.3.0: /opt/intel/compilers_and_libraries_2017.1.132/linux/mkl 
   #  buildable: False
   all:
-    compiler: [gcc@6.3.0, intel/17.0.1.132]
+    compiler: [gcc@6.3.0, intel@17.0.1.132]
     providers:
       #blas: [intel-mkl]
       #lapack: [intel-mkl]
