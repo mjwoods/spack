@@ -94,10 +94,7 @@ class Qt(Package):
     depends_on("libmng")
     depends_on("jpeg")
     depends_on("icu4c")
-    # FIXME:
-    # depends_on("freetype", when='@5.8:') and '-system-freetype'
-    # -system-harfbuzz
-    # -system-pcre
+    depends_on("harfbuzz", when='@5:')
 
     # QtQml
     depends_on("python", when='@5.7.0:', type='build')
