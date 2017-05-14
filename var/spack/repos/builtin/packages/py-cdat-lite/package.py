@@ -31,14 +31,12 @@ class PyCdatLite(PythonPackage):
     science data. It is a subset of the Climate Data Analysis Tools (CDAT)
     developed by PCMDI at Lawrence Livermore National Laboratory."""
 
-    # FIXME: Add a proper url for your package's homepage here.
     homepage = "http://proj.badc.rl.ac.uk/cedaservices/wiki/CdatLite"
-    url      = "https://pypi.python.org/packages/27/0f/793dc6c152b4281613417243728ff580c691b68d710544e06118f6eed4b5/cdat-lite-6.0.1.tar.gz"
+    url      = "https://pypi.io/packages/source/c/cdat-lite/cdat-lite-6.0.1.tar.gz"
 
     version('6.0.1', '6d5a6e86f15ce15291d25feab8793248')
 
     depends_on("netcdf")
-    depends_on("python@2:2.8")
-    depends_on("py-numpy")
+    depends_on("python@2.5:2.8", type=('build', 'run'))
+    depends_on("py-numpy", type=('build', 'run'))
     depends_on('py-setuptools', type='build')
-
