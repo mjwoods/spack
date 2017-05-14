@@ -96,6 +96,7 @@ class Qt(Package):
     depends_on("jpeg")
     depends_on("icu4c")
     depends_on("harfbuzz", when='@5:')
+    depends_on("freetype")
 
     # QtQml
     depends_on("python", when='@5.7.0:', type='build')
@@ -122,7 +123,6 @@ class Qt(Package):
     depends_on("libxfixes", when='+x11')
     depends_on("libxinerama", when='+x11')
     depends_on("fontconfig", when='+x11')
-    depends_on("freetype", when='+x11')
     depends_on("libxi", when='+x11')
     depends_on("libxt", when='+x11')
     depends_on("libxext", when='+x11')
