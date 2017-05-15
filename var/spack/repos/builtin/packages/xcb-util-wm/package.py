@@ -39,5 +39,5 @@ class XcbUtilWm(AutotoolsPackage):
     version('0.4.1', '0831399918359bf82930124fa9fd6a9b')
 
     depends_on('libxcb@1.4:')
-
+    depends_on('m4', type='build')
     depends_on('pkg-config@0.9.0:', type='build')
