@@ -8,3 +8,5 @@ packages:
 
     netcdf:
         variants: ~mpi
+    mesa:
+        variants: ~dri

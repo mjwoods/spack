@@ -7,3 +7,5 @@ packages:
         variants: ~mpi
     netcdf:
         variants: ~mpi
+    mesa:
+        variants: ~dri
