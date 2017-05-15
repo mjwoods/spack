@@ -8,3 +8,7 @@ packages:
 
     netcdf:
         variants: ~mpi
+    mesa:
+        variants: ~dri
+    all:
+        compiler: [gcc@4.8.5]
