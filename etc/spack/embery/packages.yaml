@@ -10,3 +10,5 @@ packages:
         variants: ~mpi
     mesa:
         variants: ~dri
+    qt:
+        variants: +mesa

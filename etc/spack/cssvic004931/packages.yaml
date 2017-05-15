@@ -6,3 +6,5 @@ packages:
     #    buildable: False
     mesa:
         variants: ~dri
+    qt:
+        variants: +mesa
