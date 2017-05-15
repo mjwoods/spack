@@ -17,17 +17,15 @@ packages:
       mpich@7.5.2%intel@17.0.1.132: cray-mpich/7.5.2
     buildable: False
   netcdf:
-    modules:
-      netcdf@4.4.1.1%gcc@6.3.0: cray-netcdf-hdf5parallel/4.4.1.1
-      netcdf@4.4.1.1%intel@17.0.1.132: cray-netcdf-hdf5parallel/4.4.1.1
-    variants: +mpi
-    buildable: False
+  #  modules:
+  #    netcdf@4.4.1.1%gcc@6.3.0: cray-netcdf-hdf5parallel/4.4.1.1
+  #    netcdf@4.4.1.1%intel@17.0.1.132: cray-netcdf-hdf5parallel/4.4.1.1
+    variants: ~mpi
   hdf5:
-    modules:
-      hdf5@1.10.0.1%gcc@6.3.0: cray-hdf5-parallel/1.10.0.1
-      hdf5@1.10.0.1%intel@17.0.1.132: cray-hdf5-parallel/1.10.0.1
-    variants: +mpi+szip
-    buildable: False
+  #  modules:
+  #    hdf5@1.10.0.1%gcc@6.3.0: cray-hdf5-parallel/1.10.0.1
+  #    hdf5@1.10.0.1%intel@17.0.1.132: cray-hdf5-parallel/1.10.0.1
+    variants: ~mpi
   #intel-mkl:
   #  modules:
   #    intel-mkl@2017.1.132%intel@17.0.1.132: intel/17.0.1.132
