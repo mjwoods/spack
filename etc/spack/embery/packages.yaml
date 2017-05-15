@@ -3,5 +3,12 @@ packages:
         paths:
             openssl@1.0.1e: /usr
         buildable: False
+    hdf5:
+        variants: ~mpi
+
+    netcdf:
+        variants: ~mpi
+    mesa:
+        variants: ~dri
     all:
         compiler: [gcc@4.8.5]

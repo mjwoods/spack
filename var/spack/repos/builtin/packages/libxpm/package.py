@@ -40,6 +40,8 @@ class Libxpm(AutotoolsPackage):
 
     depends_on('gettext')
     depends_on('libx11')
+    depends_on('libxcb')
+    depends_on('libxt')
 
     depends_on('xproto', type='build')
     depends_on('pkg-config@0.9.0:', type='build')

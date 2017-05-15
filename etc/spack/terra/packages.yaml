@@ -11,6 +11,8 @@ packages:
     variants: ~libxml2
   perl:
     variants: +gdbm
+  mesa:
+    variants: ~dri
   mpich:
     modules:
       mpich@7.5.2%gcc@6.3.0: cray-mpich/7.5.2
