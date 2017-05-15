@@ -12,3 +12,5 @@ packages:
         variants: ~dri
     qt:
         variants: +mesa
+    all:
+        compiler: [gcc@4.8.5]
