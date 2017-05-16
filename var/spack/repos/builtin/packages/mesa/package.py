@@ -30,9 +30,10 @@ class Mesa(AutotoolsPackage):
     specification - a system for rendering interactive 3D graphics."""
 
     homepage = "http://www.mesa3d.org"
-    url      = "http://ftp.iij.ad.jp/pub/X11/x.org/pub/mesa/12.0.3/mesa-12.0.3.tar.gz"
+    url      = "https://mesa.freedesktop.org/archive/13.0.6/mesa-13.0.6.tar.xz"
 
-    version('12.0.3', '60c5f9897ddc38b46f8144c7366e84ad')
+    version('13.0.6', '1e5a769bc6cfd839cf3febcb179c27cc')
+    version('12.0.3', '1113699c714042d8c4df4766be8c57d8')
 
     variant('dri', default=False,
             description="Use DRI drivers for accelerated OpenGL rendering")
