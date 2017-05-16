@@ -1,10 +1,10 @@
 packages:
-    # Comment out for now; system packages break spack build environment
-    #openssl:
-    #    paths:
-    #        openssl@1.0.1e: /usr
-    #    buildable: False
+    openssl:
+        paths:
+            openssl@1.0.1e: /usr
+        buildable: False
     mesa:
         variants: ~dri
     qt:
         variants: +mesa
+        version: [5.7.1]

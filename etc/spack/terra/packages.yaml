@@ -36,6 +36,7 @@ packages:
   #  buildable: False
   qt:
     variants: +mesa
+    version: [5.7.1]
   all:
     compiler: [gcc@6.3.0, intel@17.0.1.132]
     providers:
