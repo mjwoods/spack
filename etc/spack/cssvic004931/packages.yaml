@@ -6,5 +6,5 @@ packages:
     mesa:
         variants: ~dri
     qt:
-        variants: +mesa
+        variants: +mesa+examples+webkit+x11
         version: [5.7.1]

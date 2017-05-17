@@ -56,7 +56,9 @@ class Metview(CMakePackage):
     depends_on('netcdf')
     depends_on('curl')
     depends_on('bison')
-    depends_on('flex')
+    depends_on('flex+lex')
+    depends_on('perl')
+    depends_on('perl-xml-parser')
 
     def cmake_args(self):
         args = []
