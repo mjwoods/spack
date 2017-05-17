@@ -86,10 +86,7 @@ class Qt(Package):
 
     # Use system openssl for security.
     depends_on("openssl")
-
-    # Use glib without pcre dependency.
-    depends_on("glib@2.42.1", when='@4:')
-
+    depends_on("glib", when='@4:')
     depends_on("gtkplus", when='+gtk')
     depends_on("libxml2")
     depends_on("zlib")
