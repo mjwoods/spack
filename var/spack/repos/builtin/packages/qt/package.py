@@ -75,6 +75,11 @@ class Qt(Package):
     # see https://bugreports.qt.io/browse/QTBUG-58038
     patch('QTBUG-58038.patch', when='@5.8.0')
 
+    # see https://bugreports.qt.io/browse/QTBUG-57656
+    patch('QTBUG-57656.patch', when='@5.8.0')
+    # see https://bugreports.qt.io/browse/QTBUG-58038
+    patch('QTBUG-58038.patch', when='@5.8.0')
+
     # https://github.com/xboxdrv/xboxdrv/issues/188
     patch('btn_trigger_happy.patch', when='@5.7.0:')
 
@@ -307,7 +312,7 @@ class Qt(Package):
     # Don't disable all the database drivers, but should
     # really get them into spack at some point.
 
-    @when('@3')  # noqa: F811
+    @when('@3')
     def configure(self):
         # A user reported that this was necessary to link Qt3 on ubuntu.
         # However, if LD_LIBRARY_PATH is not set the qt build fails, check
@@ -334,7 +339,7 @@ class Qt(Package):
                   '-fast',
                   *args)
 
-    @when('@4')  # noqa: F811
+    @when('@4')
     def configure(self):
         configure('-fast',
                   '-{0}gtkstyle'.format('' if '+gtk' in self.spec else 'no-'),
@@ -342,7 +347,7 @@ class Qt(Package):
                   '-arch', str(self.spec.architecture.target),
                   *self.common_config_args)
 
-    @when('@5.0:5.6')  # noqa: F811
+    @when('@5.0:5.6')
     def configure(self):
         webkit_args = [] if '+webkit' in self.spec else ['-skip', 'qtwebkit']
         gcc_args =  ['-no-c++11'] if '%gcc@:4.7' in self.spec else []
@@ -351,7 +356,7 @@ class Qt(Package):
                   '-{0}gtkstyle'.format('' if '+gtk' in self.spec else 'no-'),
                   *(gcc_args + webkit_args + self.common_config_args))
 
-    @when('@5.7:')  # noqa: F811
+    @when('@5.7:')
     def configure(self):
         config_args = self.common_config_args
 

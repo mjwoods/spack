@@ -35,4 +35,3 @@ class MesaGlu(AutotoolsPackage):
     version('9.0.0', 'bbc57d4fe3bd3fb095bdbef6fcb977c4')
 
     depends_on('mesa')
-

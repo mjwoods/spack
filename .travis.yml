@@ -21,7 +21,11 @@ matrix:
     - python: '2.7'
       os: linux
       language: python
-      env: TEST_SUITE=unit
+      env: [ TEST_SUITE=unit, COVERAGE=true ]
+    - python: '2.7'
+      os: linux
+      language: python
+      env: [ TEST_SUITE=build, COVERAGE=true, 'SPEC=hypre^mpich' ]
     - python: '3.3'
       os: linux
       language: python
@@ -37,7 +41,11 @@ matrix:
     - python: '3.6'
       os: linux
       language: python
-      env: TEST_SUITE=unit
+      env: [ TEST_SUITE=unit, COVERAGE=true ]
+    - python: '3.6'
+      os: linux
+      language: python
+      env: [ TEST_SUITE=build, COVERAGE=true, 'SPEC=hypre^mpich' ]
     - python: '2.7'
       os: linux
       language: python
@@ -48,7 +56,7 @@ matrix:
       env: TEST_SUITE=doc
     - os: osx
       language: generic
-      env: [ TEST_SUITE=unit, PYTHON_VERSION=2.7 ]
+      env: [ TEST_SUITE=unit, PYTHON_VERSION=2.7, COVERAGE=true ]
 
 #=============================================================================
 # Environment
@@ -74,6 +82,8 @@ before_install:
 
 # Install various dependencies
 install:
+  - pip install --upgrade pip
+  - pip install --upgrade setuptools
   - pip install --upgrade codecov
   - pip install --upgrade flake8
   - pip install --upgrade sphinx
