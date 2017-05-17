@@ -34,14 +34,17 @@ class Mesa(AutotoolsPackage):
 
     version('12.0.3', '60c5f9897ddc38b46f8144c7366e84ad')
 
-    variant('dri', default=True,
+    variant('dri', default=False,
             description="Use DRI drivers for accelerated OpenGL rendering")
+    variant('libsysfs', default=False,
+            description="Allow libsysfs for DRI drivers (libudev preferred)")
 
     # General dependencies
     depends_on('python@2.6.4:')
     depends_on('py-mako@0.3.4:', type=('build', 'run'))
     depends_on('flex@2.5.35:', type='build')
     depends_on('bison@2.4.1:', type='build')
+    depends_on('binutils', type='build')
 
     # For DRI and hardware acceleration
     depends_on('libpthread-stubs')
@@ -54,9 +57,11 @@ class Mesa(AutotoolsPackage):
     depends_on('libxfixes')
 
     depends_on('glproto@1.4.14:', type='build')
-    depends_on('libdrm',when='+dri')
+    depends_on('libdrm', when='+dri')
     depends_on('dri2proto@2.6:', type='build', when='+dri')
     depends_on('dri3proto@1.0:', type='build', when='+dri')
+    depends_on('expat', when='+dri')
+    depends_on('llvm@3:3.99', when='+dri')
     depends_on('presentproto@1.0:', type='build')
     depends_on('pkg-config@0.9.0:', type='build')
 
@@ -66,7 +71,13 @@ class Mesa(AutotoolsPackage):
     def configure_args(self):
         spec = self.spec
         args = []
-        if spec.satisfies('~dri'):
-            args = ['--disable-dri', '--disable-egl',
-                    '--without-gallium-drivers']
+        if '+dri' in spec:
+            if '~link_dylib' in spec['llvm']:
+                args.extend(['--disable-llvm-shared-libs'])
+            if '+libsysfs' in spec:
+                # libudev is preferred but may not work on some systems:
+                args.extend(['--enable-sysfs'])
+        else:
+            args.extend(['--disable-dri', '--disable-egl',
+                         '--without-gallium-drivers'])
         return args
