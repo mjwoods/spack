@@ -75,11 +75,6 @@ class Qt(Package):
     # see https://bugreports.qt.io/browse/QTBUG-58038
     patch('QTBUG-58038.patch', when='@5.8.0')
 
-    # see https://bugreports.qt.io/browse/QTBUG-57656
-    patch('QTBUG-57656.patch', when='@5.8.0')
-    # see https://bugreports.qt.io/browse/QTBUG-58038
-    patch('QTBUG-58038.patch', when='@5.8.0')
-
     # https://github.com/xboxdrv/xboxdrv/issues/188
     patch('btn_trigger_happy.patch', when='@5.7.0:')
 
