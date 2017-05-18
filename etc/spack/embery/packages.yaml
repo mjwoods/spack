@@ -5,7 +5,6 @@ packages:
         buildable: False
     hdf5:
         variants: ~mpi
-
     netcdf:
         variants: ~mpi
     mesa:
@@ -14,4 +13,4 @@ packages:
         variants: +mesa
         version: [5.7.1]
     all:
-        compiler: [gcc@4.8.5]
+        compiler: [gcc@6.3.0, gcc@4.8.5]
