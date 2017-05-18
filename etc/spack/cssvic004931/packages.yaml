@@ -8,3 +8,5 @@ packages:
     qt:
         variants: +mesa+examples+webkit+x11
         version: [5.7.1]
+    all:
+        compiler: [gcc@6.3.0, gcc@4.8.5]
