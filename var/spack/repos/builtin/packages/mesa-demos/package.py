@@ -24,17 +24,43 @@
 ##############################################################################
 #
 from spack import *
+import os
+import inspect
 
 
 class MesaDemos(AutotoolsPackage):
     """Mesa 3D graphics demos collection"""
 
     homepage = "https://cgit.freedesktop.org/mesa/demos/"
-    url      = "ftp://ftp.freedesktop.org/pub/mesa/demos/8.3.0/mesa-demos-8.3.0.tar.bz2"
+    url      = "https://anongit.freedesktop.org/git/mesa/demos.git"
 
-    version('8.3.0', '628e75c23c17394f11a316c36f8e4164')
+    version('8.3.0', git='https://anongit.freedesktop.org/git/mesa/demos.git',
+            tag='mesa-demos-8.3.0')
+
+    depends_on('autoconf', type='build')
+    depends_on('automake', type='build')
+    depends_on('libtool', type='build')
+    depends_on('pkg-config', type='build')
+    depends_on('makedepend', type='build')
 
     depends_on('mesa')
     depends_on('mesa-glu')
     depends_on('mesa-glut')
     depends_on('glew')
+
+    def autoreconf(self, spec, prefix):
+        """Not needed usually, configure should be already there"""
+        # If configure exists nothing needs to be done
+        if os.path.exists(self.configure_abs_path):
+            return
+        with working_dir(self.configure_directory):
+            pkg_m4 = join_path(spec['pkg-config'].prefix, 'share', 'aclocal')
+            m = inspect.getmodule(self)
+            # This part should be redundant in principle, but
+            # won't hurt
+            m.libtoolize()
+            m.aclocal('-I', pkg_m4)
+            # This line is what is needed most of the time
+            # --install, --verbose, --force
+            autoreconf_args = ['-ivf', '-I', pkg_m4]
+            m.autoreconf(*autoreconf_args)
