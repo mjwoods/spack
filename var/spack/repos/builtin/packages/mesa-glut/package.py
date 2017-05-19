@@ -24,14 +24,39 @@
 ##############################################################################
 #
 from spack import *
+import os
+import inspect
 
 
-class MesaGlut(Package):
+class MesaGlut(AutotoolsPackage):
     """OpenGL Utility Toolkit"""
 
     homepage = "https://cgit.freedesktop.org/mesa/glut/"
-    url      = "ftp://ftp.freedesktop.org/pub/mesa/glut/MesaGLUT-7.9.2.tar.gz"
+    url      = "https://anongit.freedesktop.org/git/mesa/glut.git"
 
-    version('7.9.2', 'aacb8f4db997e346db40c6066942140a')
+    version('8.0.1', git='https://anongit.freedesktop.org/git/mesa/glut.git',
+            commit='ee89e9aeb49604b036e06f1df6478d32006b30cd')
 
+    depends_on('autoconf', type='build')
+    depends_on('automake', type='build')
+    depends_on('libtool', type='build')
+    depends_on('pkg-config', type='build')
+    depends_on('makedepend', type='build')
     depends_on('mesa')
+
+    def autoreconf(self, spec, prefix):
+        """Not needed usually, configure should be already there"""
+        # If configure exists nothing needs to be done
+        if os.path.exists(self.configure_abs_path):
+            return
+        with working_dir(self.configure_directory):
+            m = inspect.getmodule(self)
+            # This line is what is needed most of the time
+            # --install, --verbose, --force
+            autoreconf_args = ['-ivf']
+            if 'pkg-config' in spec:
+                autoreconf_args += [
+                    '-I',
+                    join_path(spec['pkg-config'].prefix, 'share', 'aclocal'),
+                ]
+            m.autoreconf(*autoreconf_args)
