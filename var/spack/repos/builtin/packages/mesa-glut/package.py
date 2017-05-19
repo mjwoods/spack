@@ -50,13 +50,13 @@ class MesaGlut(AutotoolsPackage):
         if os.path.exists(self.configure_abs_path):
             return
         with working_dir(self.configure_directory):
+            pkg_m4 = join_path(spec['pkg-config'].prefix, 'share', 'aclocal')
             m = inspect.getmodule(self)
+            # This part should be redundant in principle, but
+            # won't hurt
+            m.libtoolize()
+            m.aclocal('-I', pkg_m4)
             # This line is what is needed most of the time
             # --install, --verbose, --force
-            autoreconf_args = ['-ivf']
-            if 'pkg-config' in spec:
-                autoreconf_args += [
-                    '-I',
-                    join_path(spec['pkg-config'].prefix, 'share', 'aclocal'),
-                ]
+            autoreconf_args = ['-ivf', '-I', pkg_m4]
             m.autoreconf(*autoreconf_args)
