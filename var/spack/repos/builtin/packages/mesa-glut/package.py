@@ -43,6 +43,11 @@ class MesaGlut(AutotoolsPackage):
     depends_on('pkg-config', type='build')
     depends_on('makedepend', type='build')
     depends_on('mesa')
+    depends_on('mesa-glu')
+    depends_on('libx11')
+    depends_on('xproto')
+    depends_on('libxmu')
+    depends_on('libxi')
 
     def autoreconf(self, spec, prefix):
         """Not needed usually, configure should be already there"""
