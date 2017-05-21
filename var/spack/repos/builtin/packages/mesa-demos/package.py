@@ -32,7 +32,7 @@ class MesaDemos(CMakePackage):
     homepage = "https://cgit.freedesktop.org/mesa/demos/"
     url      = "https://anongit.freedesktop.org/git/mesa/demos.git"
 
-    version('8.3.0', git='https://anongit.freedesktoprg/git/mesa/demos.git',
+    version('8.3.0', git='https://anongit.freedesktop.org/git/mesa/demos.git',
             tag='mesa-demos-8.3.0')
 
     depends_on('pkg-config', type='build')
@@ -40,6 +40,10 @@ class MesaDemos(CMakePackage):
     depends_on('mesa-glu')
     depends_on('mesa-glut')
     depends_on('glew')
+    depends_on('libx11')
+    depends_on('libxext')
+    depends_on('xproto')
+    depends_on('libdrm')
 
     def cmake_args(self):
         return ['-DDEMOS_DATA_DIR=%s' % \
