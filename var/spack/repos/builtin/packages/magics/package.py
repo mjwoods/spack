@@ -23,6 +23,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##############################################################################
 from spack import *
+import glob
 
 
 class Magics(Package):
@@ -73,8 +74,8 @@ class Magics(Package):
     depends_on('qt', when='+metview+qt')
 
     def patch(self):
-        filter_file('#!/usr/bin/perl', '#!/usr/bin/env perl',
-                    'tools/xml2cc_new.pl')
+        for plfile in glob.glob('*/*.pl'):
+            filter_file('#!/usr/bin/perl', '#!/usr/bin/env perl', plfile)
 
     def install(self, spec, prefix):
         options = []
