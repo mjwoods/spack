@@ -48,8 +48,8 @@ class Metview(CMakePackage):
 
     depends_on('magics+netcdf+metview+qt~eccodes', when='+magics+gui~eccodes')
     depends_on('magics+netcdf+metview~qt~eccodes', when='+magics~gui~eccodes')
-    depends_on('magics+netcdf+metview+qt+eccodes', when='+magics+gui+eccodes')
-    depends_on('magics+netcdf+metview~qt+eccodes', when='+magics~gui+eccodes')
+    depends_on('magics+netcdf+metview+qt+eccodes@2.29.1:', when='+magics+gui+eccodes')
+    depends_on('magics+netcdf+metview~qt+eccodes@2.29.1:', when='+magics~gui+eccodes')
     depends_on('libemos~eccodes', when='~eccodes')
     depends_on('libemos+eccodes', when='+eccodes')
     depends_on('eccodes', when='+eccodes')
