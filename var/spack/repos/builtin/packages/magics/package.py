@@ -51,6 +51,7 @@ class Magics(Package):
     variant('cairo', default=True, description='Enable cairo support[png/jpeg]')
     variant('metview', default=False, description='Enable metview support')
     variant('qt', default=False, description='Enable metview support with qt')
+    variant('eccodes', default=False, description='Use eccodes instead of grib-api')
 
     depends_on('cmake', type='build')
     depends_on('pkg-config', type='build')
@@ -60,7 +61,8 @@ class Magics(Package):
     depends_on('python', type='build')
     depends_on('perl', type='build')
     depends_on('perl-xml-parser', type='build')
-    depends_on('grib-api')
+    depends_on('eccodes', when='+eccodes')
+    depends_on('grib-api', when='~eccodes')
     depends_on('proj')
     depends_on('boost')
     depends_on('expat')
@@ -83,7 +85,6 @@ class Magics(Package):
         options.append('-DENABLE_PYTHON=OFF')
         options.append('-DBOOST_ROOT=%s' % spec['boost'].prefix)
         options.append('-DPROJ4_PATH=%s' % spec['proj'].prefix)
-        options.append('-DGRIB_API_PATH=%s' % spec['grib-api'].prefix)
         options.append('-DENABLE_TESTS=OFF')
 
         if '+bufr' in spec:
@@ -112,6 +113,13 @@ class Magics(Package):
                 options.append('-DENABLE_METVIEW_NO_QT=ON')
         else:
             options.append('-DENABLE_METVIEW=OFF')
+
+        if '+eccodes' in spec:
+            options.append('-DENABLE_ECCODES=ON')
+            options.append('-DECCODES_PATH=%s' % spec['eccodes'].prefix)
+        else:
+            options.append('-DENABLE_ECCODES=OFF')
+            options.append('-DGRIB_API_PATH=%s' % spec['grib-api'].prefix)
 
         if (self.compiler.f77 is None) or (self.compiler.fc is None):
             options.append('-DENABLE_FORTRAN=OFF')
