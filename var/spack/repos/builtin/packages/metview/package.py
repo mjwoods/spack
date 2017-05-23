@@ -46,9 +46,12 @@ class Metview(CMakePackage):
     depends_on('image-magick', when='+gui')
     depends_on('proj', when='+proj')
 
-    depends_on('magics+netcdf+metview+qt', when='+magics+gui')
-    depends_on('magics+netcdf+metview', when='+magics~gui')
-    depends_on('libemos')
+    depends_on('magics+netcdf+metview+qt~eccodes', when='+magics+gui~eccodes')
+    depends_on('magics+netcdf+metview~qt~eccodes', when='+magics~gui~eccodes')
+    depends_on('magics+netcdf+metview+qt+eccodes', when='+magics+gui+eccodes')
+    depends_on('magics+netcdf+metview~qt+eccodes', when='+magics~gui+eccodes')
+    depends_on('libemos~eccodes', when='~eccodes')
+    depends_on('libemos+eccodes', when='+eccodes')
     depends_on('eccodes', when='+eccodes')
     depends_on('grib-api', when='~eccodes')
     
