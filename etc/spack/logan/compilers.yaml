@@ -19,9 +19,9 @@ compilers:
     modules: []
     operating_system: rhel7
     paths:
-      cc: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-ukbmc62sm57drv7boonaeaefnk56gfcn/bin/gcc
-      cxx: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-ukbmc62sm57drv7boonaeaefnk56gfcn/bin/g++
-      f77: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-ukbmc62sm57drv7boonaeaefnk56gfcn/bin/gfortran
-      fc: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-ukbmc62sm57drv7boonaeaefnk56gfcn/bin/gfortran
+      cc: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-2e3eatdtzdqkhqwf4wbm46qjcb55wvxk/bin/gcc
+      cxx: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-2e3eatdtzdqkhqwf4wbm46qjcb55wvxk/bin/g++
+      f77: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-2e3eatdtzdqkhqwf4wbm46qjcb55wvxk/bin/gfortran
+      fc: /g/ns/rd/rdshare/spack/rhel7/opt/linux-rhel7-x86_64/gcc-4.8.5/gcc-6.3.0-2e3eatdtzdqkhqwf4wbm46qjcb55wvxk/bin/gfortran
     spec: gcc@6.3.0
     target: x86_64
