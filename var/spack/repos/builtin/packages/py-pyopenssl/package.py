@@ -22,32 +22,18 @@
 # License along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##############################################################################
+#
 from spack import *
 
 
-class PyRequests(PythonPackage):
-    """Python HTTP for Humans."""
+class PyPyopenssl(PythonPackage):
+    """Python wrapper module around the OpenSSL library."""
 
-    homepage = "http://python-requests.org"
-    url = "https://pypi.io/packages/source/r/requests/requests-2.13.0.tar.gz"
+    homepage = "http://pythonhosted.org/pyOpenSSL"
+    url      = "https://pypi.io/packages/source/p/pyOpenSSL/pyOpenSSL-17.0.0.tar.gz"
 
-    version('2.13.0', '921ec6b48f2ddafc8bb6160957baf444')
-    version('2.11.1', 'ad5f9c47b5c5dfdb28363ad7546b0763')
+    version('17.0.0', '0704ca95106960375cfe78259453094a')
 
-    depends_on('py-setuptools',              type='build')
-    depends_on('py-pysocks', type=('build','run'))
-    depends_on('py-pyopenssl', type=('build','run'))
-    depends_on('py-idna', type=('build','run'))
-    depends_on('py-cryptography', type=('build','run'))
-    depends_on('py-urllib3', type=('build','run'))
-    depends_on('py-chardet', type=('build','run'))
-    depends_on('py-certifi', type=('build','run'))
-    
-    # from setup.py:
-    # test_requirements = ['pytest>=2.8.0', 'pytest-httpbin'==0.0.7,
-    #                      'pytest-cov', 'pytest-mock']
-    # needs #1279 and #2869
-    # depends_on('py-pytest@2.8.7:',           type=('build', 'run'))
-    # depends_on('py-pytest-cov@2.2.1:',       type=('build', 'run'))
-    # depends_on('py-pytest-httpbin@0.2.0:',   type=('build', 'run'))
-    # depends_on('py-pytest-mock@0.11.0:',     type=('build', 'run'))
+    depends_on('py-setuptools', type=('build', 'link'))
+    depends_on('py-cryptography', type=('build', 'run'))
+    depends_on('py-six', type=('build', 'run'))
