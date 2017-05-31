@@ -35,4 +35,4 @@ class PyPygraphviz(PythonPackage):
     version('1.4rc1', '2f950fb2a61a2dc85efc89543523ec07')
 
     depends_on('py-setuptools', type='build')
-    depends_on('graphviz')
+    depends_on('graphviz', type=('build', 'link', 'run'))
