@@ -61,3 +61,6 @@ class Glib(AutotoolsPackage):
         """Handle glib's version-based custom URLs."""
         url = 'http://ftp.gnome.org/pub/gnome/sources/glib'
         return url + '/%s/glib-%s.tar.xz' % (version.up_to(2), version)
+
+    def configure_args(self):
+        return ["--disable-dtrace"]
