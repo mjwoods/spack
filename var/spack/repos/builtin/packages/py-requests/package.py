@@ -35,6 +35,14 @@ class PyRequests(PythonPackage):
     version('2.11.1', 'ad5f9c47b5c5dfdb28363ad7546b0763')
 
     depends_on('py-setuptools',              type='build')
+    depends_on('py-pysocks', type=('build','run'))
+    depends_on('py-pyopenssl', type=('build','run'))
+    depends_on('py-idna', type=('build','run'))
+    depends_on('py-cryptography', type=('build','run'))
+    depends_on('py-urllib3', type=('build','run'))
+    depends_on('py-chardet', type=('build','run'))
+    depends_on('py-certifi', type=('build','run'))
+    
     # from setup.py:
     # test_requirements = ['pytest>=2.8.0', 'pytest-httpbin'==0.0.7,
     #                      'pytest-cov', 'pytest-mock']
