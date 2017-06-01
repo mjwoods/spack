@@ -37,8 +37,10 @@ class PyPygraphviz(PythonPackage):
     depends_on('py-setuptools', type='build')
     depends_on('graphviz', type=('build', 'link', 'run'))
 
-    def build_args(self, spec, prefix):
-        args = ['--include-path=%s' % prefix.include,
-                '--library-path=%s' % prefix.lib]
+    phases = ['install']
+
+    def install_args(self, spec, prefix):
+        args = ['--include-path=%s' % spec['graphviz'].prefix.include,
+                '--library-path=%s' % spec['graphviz'].prefix.lib]
         return args
 
