@@ -1,3 +1,2 @@
 mirrors:
-  mwoods: file:///g/ns/cw/aps/data-2/mwoods/src/spack/mirror
-
+  rdshare: file:///g/ns/rd/rdshare/spack/mirror
