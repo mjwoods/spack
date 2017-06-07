@@ -43,6 +43,7 @@ class GnomeIconTheme(AutotoolsPackage):
     depends_on('gtkplus~X', when='~X')
     depends_on('gtkplus+X', when='+X')
     depends_on('perl-xml-parser', type='build')
+    depends_on('intltool', type='build')
 
     def setup_environment(self, spack_env, run_env):
         """Set up the compile and runtime environments for this package."""
