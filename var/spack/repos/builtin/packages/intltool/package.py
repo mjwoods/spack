@@ -35,8 +35,9 @@ class Intltool(AutotoolsPackage):
 
     version('0.51.0', '12e517cac2b57a0121cda351570f1e63')
 
-    depends_on('perl', type=('build'))
+    # requires XML::Parser perl module
     depends_on('perl-xml-parser', type=('build', 'run'))
+    depends_on('perl@5.8.1:',     type=('build', 'run'))
 
     def check(self):
         # `make check` passes but causes `make install` to fail
