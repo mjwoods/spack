@@ -29,7 +29,7 @@ from spack import *
 class GnomeThemesStandard(AutotoolsPackage):
     """Various components of the default GNOME theme"""
 
-    homepage = "https://www.gnome.org"
+    homepage = "https://developer.gnome.org"
     url      = "https://ftp.gnome.org/pub/gnome/sources/gnome-themes-standard/3.22/gnome-themes-standard-3.22.3.tar.xz"
     list_url = "https://ftp.gnome.org/pub/gnome/sources/gnome-themes-standard/"
     list_depth = 2
