@@ -27,11 +27,11 @@ from spack import *
 
 
 class GnomeIconTheme(AutotoolsPackage):
-    """Icons for GNOME and gtk applications"""
+    """Non-scalable icons of different sizes for GNOME themes"""
 
-    homepage = "https://www.gnome-look.org"
-    url      = "http://ftp.gnome.org/pub/gnome/sources/gnome-icon-theme/3.12/gnome-icon-theme-3.12.0.tar.xz"
-    list_url = "http://ftp.gnome.org/pub/gnome/sources/gnome-icon-theme/"
+    homepage = "https://developer.gnome.org"
+    url      = "https://ftp.gnome.org/pub/gnome/sources/gnome-icon-theme/3.12/gnome-icon-theme-3.12.0.tar.xz"
+    list_url = "https://ftp.gnome.org/pub/gnome/sources/gnome-icon-theme/"
     list_depth = 2
 
     version('3.12.0', 'f14bed7f804e843189ffa7021141addd')
