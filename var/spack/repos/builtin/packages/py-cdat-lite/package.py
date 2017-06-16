@@ -48,6 +48,6 @@ class PyCdatLite(PythonPackage):
         install_args = self.install_args(spec, prefix)
         # Combine all phases into a single setup.py command,
         # otherwise extensions are rebuilt without rpath by install phase:
-        self.setup_py('build_ext', '--rpath=%s' % spec['netcdf'].prefix.lib,
+        self.setup_py('build_ext', '--rpath=%s' % ":".join(self.rpath),
                       'build_py', 'build_scripts',
                       'install', *install_args)
