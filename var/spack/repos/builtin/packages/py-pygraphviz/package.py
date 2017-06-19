@@ -39,8 +39,9 @@ class PyPygraphviz(PythonPackage):
 
     phases = ['install']
 
-    def install_args(self, spec, prefix):
-        args = ['--include-path=%s' % spec['graphviz'].prefix.include,
-                '--library-path=%s' % spec['graphviz'].prefix.lib]
-        return args
-
+    def install(self, spec, prefix):
+        """Install everything from build directory."""
+        args = self.install_args(spec, prefix)
+        args.extend(['--include-path=%s' % spec['graphviz'].prefix.include,
+                     '--library-path=%s' % spec['graphviz'].prefix.lib])
+        self.setup_py('install', *args)
