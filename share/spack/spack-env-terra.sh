@@ -14,3 +14,4 @@ export PATH="$SPACK_ROOT/bin:$PATH:/opt/modules/default/bin"
 
 . "$SPACK_ROOT/share/spack/setup-env.sh"
 
+umask 0002
