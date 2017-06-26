@@ -14,4 +14,8 @@ export PATH="$SPACK_ROOT/bin:$PATH:/opt/modules/default/bin"
 
 . "$SPACK_ROOT/share/spack/setup-env.sh"
 
+# We seem to have a bug in setup-env.sh with our version of bash,
+# because MODULEPATH is not set correctly unless we do it here:
+module use "$SPACK_ROOT/share/spack/modules/cray-CNL-haswell"
+
 umask 0002
