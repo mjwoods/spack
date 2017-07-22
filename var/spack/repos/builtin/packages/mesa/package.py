@@ -80,9 +80,8 @@ class Mesa(AutotoolsPackage):
     def configure_args(self):
         spec = self.spec
         args = []
-        drivers = []
+        drivers = ['swrast']
         if '+swrender' in spec:
-            drivers = ['swrast']
             # Needs +llvm, but also C++14? -> drivers.append('swr')
             args.extend([
                 '--disable-dri',
@@ -94,6 +93,12 @@ class Mesa(AutotoolsPackage):
                 '--enable-texture-float',
                 '--enable-gallium-osmesa',
             ])
+        else:
+            if '+llvm' in spec:
+                drivers.extend(['i915', 'nouveau', 'radeonsi',
+                                'r300', 'r600', 'svga'])
+            else:
+                drivers.extend(['r600', 'svga'])
 
         if '+llvm' in spec:
             if self.spec.version < Version('17'):
