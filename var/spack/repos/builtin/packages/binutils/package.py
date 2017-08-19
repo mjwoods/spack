@@ -39,7 +39,7 @@ class Binutils(AutotoolsPackage):
     version('2.23.2', '4f8fa651e35ef262edc01d60fb45702e')
     version('2.20.1', '2b9dc8f2b7dbd5ec5992c6e29de0b764')
 
-    variant('plugins', default=False,
+    variant('plugins', default=True,
             description="enable plugins, needed for gold linker")
     variant('gold', default=True, description="build the gold linker")
     variant('libiberty', default=False, description='Also install libiberty.')
