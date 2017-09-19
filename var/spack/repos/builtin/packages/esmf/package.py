@@ -167,7 +167,7 @@ class Esmf(MakefilePackage):
 
             # Specifies the linker directive needed to link the LAPACK library
             # to the application.
-            os.environ['ESMF_LAPACK_LIBS'] = spec['lapack'].lapack_libs.link_flags  # noqa
+            os.environ['ESMF_LAPACK_LIBS'] = spec['lapack'].libs.ld_flags
         else:
             # Disables LAPACK-dependent code.
             os.environ['ESMF_LAPACK'] = 'OFF'
