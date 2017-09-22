@@ -24,6 +24,7 @@
 ##############################################################################
 #
 from spack import *
+import os
 
 
 class Metview(CMakePackage):
@@ -41,6 +42,11 @@ class Metview(CMakePackage):
     variant('magics', default=True)
     variant('proj', default=False)
     variant('eccodes', default=False)
+
+    def chkmars(value):
+        """Existing directory or '' to disable."""
+        return value == '' or os.path.isdir(value)
+    variant('mars', default='', values=chkmars)
 
     depends_on('qt@4.6.2:', when='+gui')
     depends_on('image-magick', when='+gui')
@@ -88,6 +94,11 @@ class Metview(CMakePackage):
         else:
             args.append('-DENABLE_ECCODES=OFF')
             args.append('-DGRIB_API_PATH=%s' % self.spec['grib-api'].prefix)
+        if self.spec.variants['mars'].value == '':
+            args.append('-DENABLE_MARS=OFF')
+        else:
+            args.append('-DENABLE_MARS=ON')
+            args.append('-DMARS_LOCAL_HOME=' + self.spec.variants['mars'].value)
         args.append('-DENABLE_ODB=OFF')
         args.append('-DENABLE_MARS_ODB=OFF')
         args.append('-DNETCDF_PATH=%s' % self.spec['netcdf'].prefix)
