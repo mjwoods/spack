@@ -54,4 +54,10 @@ class OdbApi(CMakePackage):
 
     def cmake_args(self):
         args = ['-DENABLE_MIGRATOR=FALSE']
+        if self.spec.satisfies('+eccodes'):
+            args.append('-DENABLE_ECCODES=ON')
+            args.append('-DECCODES_PATH=%s' % self.spec['eccodes'].prefix)
+        else:
+            args.append('-DENABLE_ECCODES=OFF')
+            args.append('-DGRIB_API_PATH=%s' % self.spec['grib-api'].prefix)
         return args
