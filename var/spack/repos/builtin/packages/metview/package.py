@@ -36,17 +36,19 @@ class Metview(CMakePackage):
     homepage = "https://software.ecmwf.int/wiki/display/METV/Metview"
     url      = "https://software.ecmwf.int/wiki/download/attachments/3964985/Metview-4.8.4-Source.tar.gz?api=v2"
 
+    version('4.8.7', 'd7ee921bd40ce8971000be95101a5b8c102082cd')
     version('4.8.4', '0a07273ffdae3b6dddbe40f06723ea8a')
 
-    variant('gui', default=True)
-    variant('magics', default=True)
-    variant('proj', default=False)
-    variant('eccodes', default=False)
+    variant('gui', default=True, description='Enable Qt-based user interface')
+    variant('magics', default=True, description='Enable plotting capabilities using Magics')
+    variant('proj', default=False, description='Enable support for OPERA radar data')
+    variant('eccodes', default=False, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
 
     def chkmars(value):
         """Existing directory or '' to disable."""
         return value == '' or os.path.isdir(value)
-    variant('mars', default='', values=chkmars)
+    variant('mars', default='', values=chkmars, 
+            description='Specify directory of external Mars client software')
 
     depends_on('qt@4.6.2:', when='+gui')
     depends_on('image-magick', when='+gui')
