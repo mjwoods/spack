@@ -36,6 +36,7 @@ class OdbApi(CMakePackage):
 
     variant('eccodes', default=False, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
     variant('odb', default=True, description='Support legacy ODB format')
+    variant('mpi', default=False, description='Build with MPI for parallel processing')
 
     depends_on('doxygen', type='build')
     depends_on('perl', type='build')
@@ -51,6 +52,7 @@ class OdbApi(CMakePackage):
     depends_on('boost')
     depends_on('eccodes', when='+eccodes')
     depends_on('grib-api', when='~eccodes')
+    depends_on('mpi', when='+mpi')
     extends('python')
 
     def cmake_args(self):
@@ -65,4 +67,11 @@ class OdbApi(CMakePackage):
         else:
             args.append('-DENABLE_ECCODES=OFF')
             args.append('-DGRIB_API_PATH=%s' % self.spec['grib-api'].prefix)
+        if self.spec.satisfies('+mpi'):
+            args.append('-DENABLE_MPI=ON')
+            if self.spec.satisfies('+odb'):
+                args.extend(['-DENABLE_ODB_MPI=ON',
+                             '-DENABLE_ODB_MPI_SERIAL_WRAPPERS=ON'])
+        else:
+            args.append('-DENABLE_MPI=OFF')
         return args
