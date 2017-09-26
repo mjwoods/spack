@@ -26,7 +26,7 @@ from spack import *
 import glob
 
 
-class Magics(Package):
+class Magics(CMakePackage):
     """Magics is the latest generation of the ECMWF's Meteorological plotting
        software MAGICS. Although completely redesigned in C++, it is intended
        to be as backwards-compatible as possible with the Fortran interface."""
@@ -85,9 +85,9 @@ class Magics(Package):
         for pyfile in glob.glob('*/*.py'):
             filter_file('#!/usr/bin/python', '#!/usr/bin/env python', pyfile)
 
-    def install(self, spec, prefix):
+    def cmake_args(self):
+        spec = self.spec
         options = []
-        options.extend(std_cmake_args)
         options.append('-DBOOST_ROOT=%s' % spec['boost'].prefix)
         options.append('-DPROJ4_PATH=%s' % spec['proj'].prefix)
         options.append('-DENABLE_TESTS=OFF')
@@ -140,7 +140,4 @@ class Magics(Package):
         if (self.compiler.f77 is None) or (self.compiler.fc is None):
             options.append('-DENABLE_FORTRAN=OFF')
 
-        with working_dir('spack-build', create=True):
-            cmake('..', *options)
-            make()
-            make('install')
+        return options
