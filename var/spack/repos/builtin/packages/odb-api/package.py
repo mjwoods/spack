@@ -35,6 +35,7 @@ class OdbApi(CMakePackage):
     version('0.17.1', '37b4480873c10765a8896c4de9390afe')
 
     variant('eccodes', default=False, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
+    variant('odb', default=True, description='Support legacy ODB format')
 
     depends_on('doxygen', type='build')
     depends_on('perl', type='build')
@@ -53,7 +54,11 @@ class OdbApi(CMakePackage):
     extends('python')
 
     def cmake_args(self):
-        args = ['-DENABLE_MIGRATOR=FALSE']
+        args = []
+        if self.spec.satisfies('+odb'):
+            args.extend(['-DENABLE_ODB=ON', '-DENABLE_MIGRATOR=ON'])
+        else:
+            args.extend(['-DENABLE_ODB=OFF', '-DENABLE_MIGRATOR=OFF'])
         if self.spec.satisfies('+eccodes'):
             args.append('-DENABLE_ECCODES=ON')
             args.append('-DECCODES_PATH=%s' % self.spec['eccodes'].prefix)
