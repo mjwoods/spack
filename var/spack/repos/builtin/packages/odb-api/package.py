@@ -54,7 +54,7 @@ class OdbApi(CMakePackage):
     extends('python')
 
     def cmake_args(self):
-        args = []
+        args = ['-DENABLE_FORTRAN=ON']
         if self.spec.satisfies('+odb'):
             args.extend(['-DENABLE_ODB=ON', '-DENABLE_MIGRATOR=ON'])
         else:
