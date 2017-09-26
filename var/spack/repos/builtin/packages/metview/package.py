@@ -42,6 +42,7 @@ class Metview(CMakePackage):
     variant('gui', default=True, description='Enable Qt-based user interface')
     variant('magics', default=True, description='Enable plotting capabilities using Magics')
     variant('proj', default=False, description='Enable support for OPERA radar data')
+    variant('odb', default=False, description='Enable processing and plotting of ODB data')
     variant('eccodes', default=False, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
 
     def chkmars(value):
@@ -62,6 +63,8 @@ class Metview(CMakePackage):
     depends_on('libemos+eccodes', when='+eccodes')
     depends_on('eccodes', when='+eccodes')
     depends_on('grib-api', when='~eccodes')
+    depends_on('odb-api+eccodes', when='+odb+eccodes')
+    depends_on('odb-api~eccodes', when='+odb~eccodes')
     
     #depends_on('gdbm')
     depends_on('netcdf')
@@ -101,7 +104,11 @@ class Metview(CMakePackage):
         else:
             args.append('-DENABLE_MARS=ON')
             args.append('-DMARS_LOCAL_HOME=' + self.spec.variants['mars'].value)
-        args.append('-DENABLE_ODB=OFF')
+        if self.spec.satisfies('+odb'):
+            args.append('-DENABLE_ODB=ON')
+            args.append('-DODB_API_PATH=%s' % self.spec['odb-api'].prefix)
+        else:
+            args.append('-DENABLE_ODB=OFF')
         args.append('-DENABLE_MARS_ODB=OFF')
         args.append('-DNETCDF_PATH=%s' % self.spec['netcdf'].prefix)
         args.append('-DEMOS_PATH=%s' % self.spec['libemos'].prefix)
