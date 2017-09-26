@@ -48,6 +48,7 @@ class Magics(Package):
     patch('resolve_isnan_ambiguity.patch', when='@2.29.0')
 
     variant('bufr', default=False, description='Enable BUFR support')
+    variant('odb', default=False, description='Enable ODB support')
     variant('netcdf', default=False, description='Enable NetCDF support')
     variant('cairo', default=True, description='Enable cairo support[png/jpeg]')
     variant('metview', default=False, description='Enable metview support')
@@ -74,6 +75,7 @@ class Magics(Package):
     depends_on('pango', when='+cairo')
     depends_on('netcdf-cxx', when='+netcdf')
     depends_on('libemos', when='+bufr')
+    depends_on('odb-api', when='+odb')
     depends_on('qt', when='+metview+qt')
 
     # Replace system python and perl by spack versions:
@@ -86,7 +88,6 @@ class Magics(Package):
     def install(self, spec, prefix):
         options = []
         options.extend(std_cmake_args)
-        options.append('-DENABLE_ODB=OFF')
         options.append('-DBOOST_ROOT=%s' % spec['boost'].prefix)
         options.append('-DPROJ4_PATH=%s' % spec['proj'].prefix)
         options.append('-DENABLE_TESTS=OFF')
@@ -96,6 +97,12 @@ class Magics(Package):
             options.append('-DLIBEMOS_PATH=%s' % spec['libemos'].prefix)
         else:
             options.append('-DENABLE_BUFR=OFF')
+
+        if '+odb' in spec:
+            options.append('-DENABLE_ODB=ON')
+            options.append('-DODB_API_PATH=%s' % spec['odb-api'].prefix)
+        else:
+            options.append('-DENABLE_ODB=OFF')
 
         if '+netcdf' in spec:
             options.append('-DENABLE_NETCDF=ON')
