@@ -26,7 +26,7 @@ from spack import *
 import glob
 
 
-class Magics(Package):
+class Magics(CMakePackage):
     """Magics is the latest generation of the ECMWF's Meteorological plotting
        software MAGICS. Although completely redesigned in C++, it is intended
        to be as backwards-compatible as possible with the Fortran interface."""
@@ -37,9 +37,10 @@ class Magics(Package):
     # Maintainers of Magics do not keep tarballs of minor releases. Once the
     # next minor released is published the previous one becomes unavailable.
     # That is why the preferred version is the latest stable one.
+    version('2.34.1', '867aa2295075f497306fe53e5917a919cd6969d6')
     version('2.32.0', 'e17956fffce9ea826cf994f8d275e0f5')
     version('2.29.4', '91c561f413316fb665b3bb563f3878d1')
-    version('2.29.0', 'db20a4d3c51a2da5657c31ae3de59709', preferred=True)
+    version('2.29.0', 'db20a4d3c51a2da5657c31ae3de59709')
 
     # The patch reorders includes and adds namespaces where necessary to
     # resolve ambiguity of invocations of isnan and isinf functions. The
@@ -47,18 +48,23 @@ class Magics(Package):
     patch('resolve_isnan_ambiguity.patch', when='@2.29.0')
 
     variant('bufr', default=False, description='Enable BUFR support')
+    variant('odb', default=False, description='Enable ODB support')
     variant('netcdf', default=False, description='Enable NetCDF support')
     variant('cairo', default=True, description='Enable cairo support[png/jpeg]')
     variant('metview', default=False, description='Enable metview support')
     variant('qt', default=False, description='Enable metview support with qt')
     variant('eccodes', default=False, description='Use eccodes instead of grib-api')
+    variant('python', default=True, description='Build python interface')
 
     depends_on('cmake', type='build')
     depends_on('pkg-config', type='build')
 
-    # Currently python is only necessary to run
-    # building preprocessing scripts.
-    depends_on('python', type='build')
+    depends_on('python', type='build', when='~python')
+    extends('python', when='+python')
+    depends_on('python', type=('build','run'), when='+python')
+    depends_on('py-numpy', type=('build','run'), when='+python')
+    depends_on('swig', when='+python')
+
     depends_on('perl', type='build')
     depends_on('perl-xml-parser', type='build')
     depends_on('eccodes', when='+eccodes')
@@ -69,6 +75,7 @@ class Magics(Package):
     depends_on('pango', when='+cairo')
     depends_on('netcdf-cxx', when='+netcdf')
     depends_on('libemos', when='+bufr')
+    depends_on('odb-api', when='+odb')
     depends_on('qt', when='+metview+qt')
 
     # Replace system python and perl by spack versions:
@@ -78,11 +85,9 @@ class Magics(Package):
         for pyfile in glob.glob('*/*.py'):
             filter_file('#!/usr/bin/python', '#!/usr/bin/env python', pyfile)
 
-    def install(self, spec, prefix):
+    def cmake_args(self):
+        spec = self.spec
         options = []
-        options.extend(std_cmake_args)
-        options.append('-DENABLE_ODB=OFF')
-        options.append('-DENABLE_PYTHON=OFF')
         options.append('-DBOOST_ROOT=%s' % spec['boost'].prefix)
         options.append('-DPROJ4_PATH=%s' % spec['proj'].prefix)
         options.append('-DENABLE_TESTS=OFF')
@@ -92,6 +97,12 @@ class Magics(Package):
             options.append('-DLIBEMOS_PATH=%s' % spec['libemos'].prefix)
         else:
             options.append('-DENABLE_BUFR=OFF')
+
+        if '+odb' in spec:
+            options.append('-DENABLE_ODB=ON')
+            options.append('-DODB_API_PATH=%s' % spec['odb-api'].prefix)
+        else:
+            options.append('-DENABLE_ODB=OFF')
 
         if '+netcdf' in spec:
             options.append('-DENABLE_NETCDF=ON')
@@ -121,10 +132,12 @@ class Magics(Package):
             options.append('-DENABLE_ECCODES=OFF')
             options.append('-DGRIB_API_PATH=%s' % spec['grib-api'].prefix)
 
+        if '+python' in spec:
+            options.append('-DENABLE_PYTHON=ON')
+        else:
+            options.append('-DENABLE_PYTHON=OFF')
+
         if (self.compiler.f77 is None) or (self.compiler.fc is None):
             options.append('-DENABLE_FORTRAN=OFF')
 
-        with working_dir('spack-build', create=True):
-            cmake('..', *options)
-            make()
-            make('install')
+        return options
