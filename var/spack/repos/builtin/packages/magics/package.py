@@ -53,13 +53,17 @@ class Magics(Package):
     variant('metview', default=False, description='Enable metview support')
     variant('qt', default=False, description='Enable metview support with qt')
     variant('eccodes', default=False, description='Use eccodes instead of grib-api')
+    variant('python', default=True, description='Build python interface')
 
     depends_on('cmake', type='build')
     depends_on('pkg-config', type='build')
 
-    # Currently python is only necessary to run
-    # building preprocessing scripts.
-    depends_on('python', type='build')
+    depends_on('python', type='build', when='~python')
+    extends('python', when='+python')
+    depends_on('python', type=('build','run'), when='+python')
+    depends_on('py-numpy', type=('build','run'), when='+python')
+    depends_on('swig', when='+python')
+
     depends_on('perl', type='build')
     depends_on('perl-xml-parser', type='build')
     depends_on('eccodes', when='+eccodes')
@@ -83,7 +87,6 @@ class Magics(Package):
         options = []
         options.extend(std_cmake_args)
         options.append('-DENABLE_ODB=OFF')
-        options.append('-DENABLE_PYTHON=OFF')
         options.append('-DBOOST_ROOT=%s' % spec['boost'].prefix)
         options.append('-DPROJ4_PATH=%s' % spec['proj'].prefix)
         options.append('-DENABLE_TESTS=OFF')
@@ -121,6 +124,11 @@ class Magics(Package):
         else:
             options.append('-DENABLE_ECCODES=OFF')
             options.append('-DGRIB_API_PATH=%s' % spec['grib-api'].prefix)
+
+        if '+python' in spec:
+            options.append('-DENABLE_PYTHON=ON')
+        else:
+            options.append('-DENABLE_PYTHON=OFF')
 
         if (self.compiler.f77 is None) or (self.compiler.fc is None):
             options.append('-DENABLE_FORTRAN=OFF')
