@@ -75,7 +75,8 @@ class Magics(CMakePackage):
     depends_on('pango', when='+cairo')
     depends_on('netcdf-cxx', when='+netcdf')
     depends_on('libemos', when='+bufr')
-    depends_on('odb-api', when='+odb')
+    depends_on('odb-api+eccodes', when='+odb+eccodes')
+    depends_on('odb-api~eccodes', when='+odb~eccodes')
     depends_on('qt', when='+metview+qt')
 
     # Replace system python and perl by spack versions:
