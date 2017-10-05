@@ -53,7 +53,7 @@ class Magics(CMakePackage):
     variant('cairo', default=True, description='Enable cairo support[png/jpeg]')
     variant('metview', default=False, description='Enable metview support')
     variant('qt', default=False, description='Enable metview support with qt')
-    variant('eccodes', default=False, description='Use eccodes instead of grib-api')
+    variant('eccodes', default=True, description='Use eccodes instead of grib-api')
     variant('python', default=True, description='Build python interface')
 
     depends_on('cmake', type='build')
