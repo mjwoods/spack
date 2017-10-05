@@ -98,6 +98,8 @@ class MetviewBundle(CMakePackage):
                     [self.spec['netcdf'].prefix,
                      self.spec['netcdf-cxx'].prefix]))
 
+        args.append('-DENABLE_OPERA_RADAR=ON')
+
         if self.spec.satisfies('+eccodes'):
             args.append('-DENABLE_ECCODES=ON')
         else:
