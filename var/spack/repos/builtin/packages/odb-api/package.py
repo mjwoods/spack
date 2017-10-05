@@ -34,7 +34,7 @@ class OdbApi(CMakePackage):
 
     version('0.17.1', '37b4480873c10765a8896c4de9390afe')
 
-    variant('eccodes', default=False, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
+    variant('eccodes', default=True, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
     variant('odb', default=True, description='Support legacy ODB format')
     variant('mpi', default=False, description='Build with MPI for parallel processing')
 
