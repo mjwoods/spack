@@ -32,6 +32,7 @@ class Libemos(Package):
     homepage = "https://software.ecmwf.int/wiki/display/EMOS/Emoslib"
     url      = "https://software.ecmwf.int/wiki/download/attachments/3473472/libemos-4.4.2-Source.tar.gz"
 
+    version('4.5.1', '660eed48e9f1ff17e5d848069107f01efba91efe')
     version('4.4.7', '395dcf21cf06872f772fb6b73d8e67b9')
     version('4.4.2', 'f15a9aff0f40861f3f046c9088197376')
 
