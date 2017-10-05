@@ -43,7 +43,7 @@ class Metview(CMakePackage):
     variant('magics', default=True, description='Enable plotting capabilities using Magics')
     variant('proj', default=False, description='Enable support for OPERA radar data')
     variant('odb', default=False, description='Enable processing and plotting of ODB data')
-    variant('eccodes', default=False, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
+    variant('eccodes', default=True, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
 
     def chkmars(value):
         """Existing directory or '' to disable."""
