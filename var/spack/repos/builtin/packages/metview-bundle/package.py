@@ -25,6 +25,7 @@
 #
 from spack import *
 import os
+import sys
 
 
 class MetviewBundle(CMakePackage):
