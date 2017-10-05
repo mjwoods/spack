@@ -40,8 +40,18 @@ class MetviewBundle(CMakePackage):
 
     version('2017.07.1', '00e31aa44fa7c2d1e80b6d637445f97967c838db')
 
+    def isstr(value):
+        """Path string or '' for default."""
+        if sys.version_info[0] < 3:
+            result = isinstance(value, basestring)
+        else:
+            result = isinstance(value, str)
+        return result
+
     variant('odb', default=True, description='Enable processing and plotting of ODB data')
     variant('eccodes', default=True, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
+    variant('mars_client', default='', values=isstr,
+        description='Location of external Mars client software')
 
     depends_on('qt@4.6.2:')
     depends_on('image-magick')
@@ -88,6 +98,8 @@ class MetviewBundle(CMakePackage):
                     [self.spec['netcdf'].prefix,
                      self.spec['netcdf-cxx'].prefix]))
 
+        args.append('-DENABLE_OPERA_RADAR=ON')
+
         if self.spec.satisfies('+eccodes'):
             args.append('-DENABLE_ECCODES=ON')
         else:
@@ -97,5 +109,9 @@ class MetviewBundle(CMakePackage):
             args.append('-DENABLE_ODB=ON')
         else:
             args.append('-DENABLE_ODB=OFF')
+
+        if self.spec.variants['mars_client'].value != '':
+            args.append('-DENABLE_MARS=ON')
+            args.append('-DMARS_LOCAL_HOME=' + self.spec.variants['mars_client'].value)
 
         return args
