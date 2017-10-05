@@ -34,6 +34,7 @@ class Eccodes(CMakePackage):
     url      = "https://software.ecmwf.int/wiki/download/attachments/45757960/eccodes-2.2.0-Source.tar.gz?api=v2"
     list_url = "https://software.ecmwf.int/wiki/display/ECC/Releases"
 
+    version('2.4.1', '30fa69f3cec657061dfe9d6e839500f3b4ecb943')
     version('2.2.0', 'b27e6f0a3eea5b92dac37372e4c45a62')
 
     variant('netcdf', default=True,
