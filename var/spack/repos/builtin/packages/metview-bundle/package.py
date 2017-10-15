@@ -54,6 +54,20 @@ class MetviewBundle(CMakePackage):
     variant('mars_client', default='', values=isstr,
         description='Location of external Mars client software')
 
+    #resource(
+    #    name='odb-api-bundle',
+    #    url='https://software.ecmwf.int/wiki/download/attachments/61117379/odb_api_bundle-0.17.1-Source.tar.gz?api=v2',
+    #    md5='37b4480873c10765a8896c4de9390afe',
+    #    placement='odb-api-bundle',
+    #    when='+odb')
+
+    # Use odb_api_bundle for +odb variant.
+    def patch(self):
+        if self.spec.satisfies('+odb'):
+            filter_file('odb_api', 'odb_api_bundle', 'metview/CMakeLists.txt')
+
+    depends_on('odb-api+odb1+eccodes', when='+odb+eccodes')
+    depends_on('odb-api+odb1~eccodes', when='+odb~eccodes')
     depends_on('qt@4.6.2:')
     depends_on('image-magick')
     depends_on('proj')
@@ -83,15 +97,15 @@ class MetviewBundle(CMakePackage):
     depends_on('perl-xml-parser', type='build')
 
     def cmake_args(self):
-        args = ['-DECBUILD_LOG_LEVEL=DEBUG']
+        args = ['-DECBUILD_LOG_LEVEL=DEBUG', '-DCMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE=ON']
+        fflags = []
+        cmakepath = []
 
         # Extended source may be needed for long directory names:
         if self.spec.satisfies('%gcc'):
-            fflags = '-ffree-line-length-none -ffixed-line-length-none'
-            args.append('-DCMAKE_Fortran_FLAGS=%s' % fflags)
+            fflags.extend(['-ffree-line-length-none', '-ffixed-line-length-none'])
 
-        cpref = [self.spec['qt'].prefix]
-        args.append('-DCMAKE_PREFIX_PATH=%s' % ':'.join(cpref))
+        cmakepath.append(self.spec['qt'].prefix)
         if self.spec.satisfies('^qt@5:'):
             args.append('-DENABLE_QT5=ON')
 
@@ -107,12 +121,29 @@ class MetviewBundle(CMakePackage):
             args.append('-DENABLE_ECCODES=OFF')
 
         if self.spec.satisfies('+odb'):
-            args.append('-DENABLE_ODB=ON')
+            args.extend(['-DENABLE_ODB=ON',
+                         '-DODB_API_BUNDLE_PATH=%s' % self.spec['odb-api'].prefix,
+                         '-DODB_PATH=%s' % self.spec['odb-api'].prefix])
+# TODO: spack prepends include path with its own package paths,
+#   so codb.h is found in odb-api before metview.
+#   We could prepend the metview path with spack cflags,
+#   or we could rename codb.h to CODB.h in metview and its include files
+#   (see the metview/src/Macro dir).
+
+            #'-DODB1_USE_SCRIPT_PATH=%s' % 
+            #join_path(self.spec['odb-api'].prefix.bin, 'use_odb.sh')])
+            #cmakepath.append(join_path(self.stage.source_path, 'odb-api-bundle'))
         else:
             args.append('-DENABLE_ODB=OFF')
 
         if self.spec.variants['mars_client'].value != '':
-            args.append('-DENABLE_MARS=ON')
-            args.append('-DMARS_LOCAL_HOME=' + self.spec.variants['mars_client'].value)
+            args.extend(['-DENABLE_MARS=ON',
+                         '-DMARS_LOCAL_HOME=' + self.spec.variants['mars_client'].value])
+
+        if len(fflags) > 0:
+            args.append('-DCMAKE_Fortran_FLAGS=%s' % ' '.join(fflags))
+
+        if len(cmakepath) > 0:
+            args.append('-DCMAKE_PREFIX_PATH=%s' % ':'.join(cmakepath))
 
         return args
