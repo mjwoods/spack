@@ -38,10 +38,10 @@ class Lfric(MakefilePackage):
     version('trunk', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
 
     depends_on('mpi')
-    depends_on('netcdf')
+    depends_on('netcdf+mpi')
     depends_on('netcdf-fortran')
     depends_on('netcdf-cxx')
-    depends_on('esmf')
+    depends_on('esmf~xerces')
     depends_on('xios')
 
     depends_on('gmake', type='build')
