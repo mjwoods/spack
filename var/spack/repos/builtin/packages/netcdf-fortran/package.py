@@ -34,7 +34,21 @@ class NetcdfFortran(AutotoolsPackage):
     version('4.4.4', 'e855c789cd72e1b8bc1354366bf6ac72')
     version('4.4.3', 'bfd4ae23a34635b273d3eb0d91cbde9e')
 
+    variant('mpi', default=True, description="Enable MPI parallelism")
+
     depends_on('netcdf')
+
+    def configure_args(self):
+        spec = self.spec
+        args = []
+
+        if spec.satisfies('^netcdf+mpi'):
+            args.extend(['CC=%s' % spec['mpi'].mpicc,
+                         'F77=%s' % spec['mpi'].mpif77,
+                         'FC=%s' % spec['mpi'].mpifc,
+                        ])
+
+        return args
 
     @property
     def libs(self):
