@@ -34,4 +34,5 @@ class PyTraceback2(PythonPackage):
 
     version('1.4.0', '9e9723f4d70bfc6308fa992dd193c400')
 
-    # depends_on('py-setuptools', type='build')
+    depends_on('py-setuptools', type='build')
+    depends_on('py-pbr')
