@@ -55,6 +55,7 @@ class Lfric(MakefilePackage):
     depends_on('py-fparser', type='build')
     depends_on('py-jinja2', type='build')
     depends_on('py-psyclone', type='build')
+    depends_on('py-numpy', type='build')
     depends_on('pfunit', type='build')
 
     def build(self, spec, prefix):
