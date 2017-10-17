@@ -37,5 +37,6 @@ class PyUnittest2(PythonPackage):
     depends_on('py-setuptools', type='build')
     depends_on('py-enum34', when='^python@:3.3', type=('build', 'run'))
     depends_on('py-traceback2', type=('build', 'run'))
+    depends_on('py-linecache2', type=('build', 'run'))
     depends_on('py-argparse', type=('build', 'run'))
     depends_on('py-six', type=('build', 'run'))
