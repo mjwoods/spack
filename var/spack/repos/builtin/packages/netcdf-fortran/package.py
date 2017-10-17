@@ -37,6 +37,7 @@ class NetcdfFortran(AutotoolsPackage):
     variant('mpi', default=True, description="Enable MPI parallelism")
 
     depends_on('netcdf')
+    depends_on('mpi', when='+mpi')
 
     def configure_args(self):
         spec = self.spec
