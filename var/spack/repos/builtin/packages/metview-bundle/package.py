@@ -26,6 +26,7 @@
 from spack import *
 import os
 import sys
+import glob
 
 
 class MetviewBundle(CMakePackage):
@@ -54,20 +55,21 @@ class MetviewBundle(CMakePackage):
     variant('mars_client', default='', values=isstr,
         description='Location of external Mars client software')
 
-    #resource(
-    #    name='odb-api-bundle',
-    #    url='https://software.ecmwf.int/wiki/download/attachments/61117379/odb_api_bundle-0.17.1-Source.tar.gz?api=v2',
-    #    md5='37b4480873c10765a8896c4de9390afe',
-    #    placement='odb-api-bundle',
-    #    when='+odb')
-
-    # Use odb_api_bundle for +odb variant.
     def patch(self):
         if self.spec.satisfies('+odb'):
-            filter_file('odb_api', 'odb_api_bundle', 'metview/CMakeLists.txt')
-
+            # Use odb_api_bundle to provide odb1 support:
+            with working_dir('metview'):
+                filter_file('odb_api', 'odb_api_bundle', 'CMakeLists.txt')
+            # Avoid a header file conflict with odb_api_bundle:
+            with working_dir(join_path('metview', 'src', 'Macro')):
+                os.rename(join_path('include', 'codb.h'),
+                          join_path('include', 'CODB.h'))
+                for ccfile in glob.glob('./*.cc'):
+                    filter_file(r'#include "codb.h"', '#include "CODB.h"', ccfile)
+                
     depends_on('odb-api+odb1+eccodes', when='+odb+eccodes')
     depends_on('odb-api+odb1~eccodes', when='+odb~eccodes')
+
     depends_on('qt@4.6.2:')
     depends_on('image-magick')
     depends_on('proj')
