@@ -41,7 +41,12 @@ class Lfric(MakefilePackage):
     depends_on('netcdf+mpi')
     depends_on('netcdf-fortran')
     depends_on('netcdf-cxx')
-    depends_on('esmf~xerces')
+    # lfric uses -lesmf, which does not reference all dependent libraries.
+    # If we use default esmf variants, missing symbols occur.
+    # So we keep the variants to a minimum here.
+    # Or we could link with -lesmf_fullylinked to pull in dependent libs,
+    # but that doesn't work for static builds.
+    depends_on('esmf~xerces~pnetcdf~lapack')
     depends_on('xios')
 
     depends_on('gmake', type='build')
