@@ -26,6 +26,7 @@
 from spack import *
 import os
 import sys
+import glob
 
 
 class MetviewBundle(CMakePackage):
@@ -53,6 +54,21 @@ class MetviewBundle(CMakePackage):
     variant('eccodes', default=True, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
     variant('mars_client', default='', values=isstr,
         description='Location of external Mars client software')
+
+    def patch(self):
+        if self.spec.satisfies('+odb'):
+            # Use odb_api_bundle to provide odb1 support:
+            with working_dir('metview'):
+                filter_file('odb_api', 'odb_api_bundle', 'CMakeLists.txt')
+            # Avoid a header file conflict with odb_api_bundle:
+            with working_dir(join_path('metview', 'src', 'Macro')):
+                os.rename(join_path('include', 'codb.h'),
+                          join_path('include', 'CODB.h'))
+                for ccfile in glob.glob('./*.cc'):
+                    filter_file(r'#include "codb.h"', '#include "CODB.h"', ccfile)
+                
+    depends_on('odb-api+odb1+eccodes', when='+odb+eccodes')
+    depends_on('odb-api+odb1~eccodes', when='+odb~eccodes')
 
     depends_on('qt@4.6.2:')
     depends_on('image-magick')
@@ -83,15 +99,15 @@ class MetviewBundle(CMakePackage):
     depends_on('perl-xml-parser', type='build')
 
     def cmake_args(self):
-        args = ['-DECBUILD_LOG_LEVEL=DEBUG']
+        args = ['-DECBUILD_LOG_LEVEL=DEBUG', '-DCMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE=ON']
+        fflags = []
+        cmakepath = []
 
         # Extended source may be needed for long directory names:
         if self.spec.satisfies('%gcc'):
-            fflags = '-ffree-line-length-none -ffixed-line-length-none'
-            args.append('-DCMAKE_Fortran_FLAGS=%s' % fflags)
+            fflags.extend(['-ffree-line-length-none', '-ffixed-line-length-none'])
 
-        cpref = [self.spec['qt'].prefix]
-        args.append('-DCMAKE_PREFIX_PATH=%s' % ':'.join(cpref))
+        cmakepath.append(self.spec['qt'].prefix)
         if self.spec.satisfies('^qt@5:'):
             args.append('-DENABLE_QT5=ON')
 
@@ -107,12 +123,23 @@ class MetviewBundle(CMakePackage):
             args.append('-DENABLE_ECCODES=OFF')
 
         if self.spec.satisfies('+odb'):
-            args.append('-DENABLE_ODB=ON')
+            args.extend(['-DENABLE_ODB=ON',
+                         '-DODB_API_BUNDLE_PATH=%s' % self.spec['odb-api'].prefix,
+                         '-DODB_PATH=%s' % self.spec['odb-api'].prefix,
+                         '-DODB1_USE_SCRIPT_PATH=%s' % join_path(
+                             self.spec['odb-api'].prefix.bin, 'use_odb.sh'),
+                        ])
         else:
             args.append('-DENABLE_ODB=OFF')
 
         if self.spec.variants['mars_client'].value != '':
-            args.append('-DENABLE_MARS=ON')
-            args.append('-DMARS_LOCAL_HOME=' + self.spec.variants['mars_client'].value)
+            args.extend(['-DENABLE_MARS=ON',
+                         '-DMARS_LOCAL_HOME=' + self.spec.variants['mars_client'].value])
+
+        if len(fflags) > 0:
+            args.append('-DCMAKE_Fortran_FLAGS=%s' % ' '.join(fflags))
+
+        if len(cmakepath) > 0:
+            args.append('-DCMAKE_PREFIX_PATH=%s' % ':'.join(cmakepath))
 
         return args

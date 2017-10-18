@@ -35,7 +35,7 @@ class OdbApi(CMakePackage):
     version('0.17.1', '37b4480873c10765a8896c4de9390afe')
 
     variant('eccodes', default=True, description='Use ecCodes (True) or GRIB-API (False) for GRIB handling')
-    variant('odb', default=False, description='Support legacy ODB format')
+    variant('odb1', default=True, description='Support legacy ODB format')
     variant('mpi', default=False, description='Build with MPI for parallel processing')
 
     depends_on('doxygen', type='build')
@@ -57,7 +57,7 @@ class OdbApi(CMakePackage):
 
     def cmake_args(self):
         args = ['-DENABLE_FORTRAN=ON']
-        if self.spec.satisfies('+odb'):
+        if self.spec.satisfies('+odb1'):
             args.extend(['-DENABLE_ODB=ON', '-DENABLE_MIGRATOR=ON'])
         else:
             args.extend(['-DENABLE_ODB=OFF', '-DENABLE_MIGRATOR=OFF'])
@@ -69,7 +69,7 @@ class OdbApi(CMakePackage):
             args.append('-DGRIB_API_PATH=%s' % self.spec['grib-api'].prefix)
         if self.spec.satisfies('+mpi'):
             args.append('-DENABLE_MPI=ON')
-            if self.spec.satisfies('+odb'):
+            if self.spec.satisfies('+odb1'):
                 args.extend(['-DENABLE_ODB_MPI=ON',
                              '-DENABLE_ODB_MPI_SERIAL_WRAPPERS=ON'])
         else:
