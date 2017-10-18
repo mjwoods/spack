@@ -125,16 +125,10 @@ class MetviewBundle(CMakePackage):
         if self.spec.satisfies('+odb'):
             args.extend(['-DENABLE_ODB=ON',
                          '-DODB_API_BUNDLE_PATH=%s' % self.spec['odb-api'].prefix,
-                         '-DODB_PATH=%s' % self.spec['odb-api'].prefix])
-# TODO: spack prepends include path with its own package paths,
-#   so codb.h is found in odb-api before metview.
-#   We could prepend the metview path with spack cflags,
-#   or we could rename codb.h to CODB.h in metview and its include files
-#   (see the metview/src/Macro dir).
-
-            #'-DODB1_USE_SCRIPT_PATH=%s' % 
-            #join_path(self.spec['odb-api'].prefix.bin, 'use_odb.sh')])
-            #cmakepath.append(join_path(self.stage.source_path, 'odb-api-bundle'))
+                         '-DODB_PATH=%s' % self.spec['odb-api'].prefix,
+                         '-DODB1_USE_SCRIPT_PATH=%s' % join_path(
+                             self.spec['odb-api'].prefix.bin, 'use_odb.sh'),
+                        ])
         else:
             args.append('-DENABLE_ODB=OFF')
 
