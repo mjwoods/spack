@@ -38,3 +38,17 @@ compilers:
       fc: /usr/bin/gfortran
     spec: gcc@4.1.2
     target: x86_64
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags:
+      cflags: -fgnu89-inline
+    modules: []
+    operating_system: rhel5
+    paths:
+      cc: /rtop/dev/mwoods/spack/opt/linux-rhel5-x86_64/gcc-4.4.7/gcc-6.3.0-mx24tto6fosaoibcf77pvt7er3mfzkck/bin/gcc
+      cxx: /rtop/dev/mwoods/spack/opt/linux-rhel5-x86_64/gcc-4.4.7/gcc-6.3.0-mx24tto6fosaoibcf77pvt7er3mfzkck/bin/g++
+      f77: /rtop/dev/mwoods/spack/opt/linux-rhel5-x86_64/gcc-4.4.7/gcc-6.3.0-mx24tto6fosaoibcf77pvt7er3mfzkck/bin/gfortran
+      fc: /rtop/dev/mwoods/spack/opt/linux-rhel5-x86_64/gcc-4.4.7/gcc-6.3.0-mx24tto6fosaoibcf77pvt7er3mfzkck/bin/gfortran
+    spec: gcc@6.3.0
+    target: x86_64
