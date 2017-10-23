@@ -54,6 +54,8 @@ class Glib(AutotoolsPackage):
     # Clang doesn't seem to acknowledge the pragma lines to disable the -Werror
     # around a legitimate usage.
     patch('no-Werror=format-security.patch')
+    # Patch for C library routines missing from older OS releases:
+    patch('no_mkostemp_cloexec.patch', when='arch=linux-rhel5-x86_64')
 
     force_autoreconf = True
 
