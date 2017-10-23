@@ -32,3 +32,6 @@ class PySubprocess32(PythonPackage):
     url      = "https://pypi.io/packages/source/s/subprocess32/subprocess32-3.2.7.tar.gz"
 
     version('3.2.7', '824c801e479d3e916879aae3e9c15e16')
+
+    # Patch for C library routine missing from older OS releases:
+    patch('no_pipe2.patch', when='arch=linux-rhel5-x86_64')
