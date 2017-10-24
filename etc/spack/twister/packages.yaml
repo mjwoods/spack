@@ -1,0 +1,12 @@
+packages:
+    hdf5:
+        variants: ~mpi
+    netcdf:
+        variants: ~mpi
+    mesa:
+        variants: ~dri
+    all:
+        compiler: [gcc@6.3.0]
+        providers:
+            blas: [openblas]
+            lapack: [openblas]
