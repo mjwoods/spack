@@ -33,7 +33,7 @@ class Lfric(MakefilePackage):
     homepage = "https://code.metoffice.gov.uk/trac/lfric"
     url = "https://code.metoffice.gov.uk/trac/lfric/browser"
 
-    version('11638', revision='11638',
+    version('11689', revision='11689',
             svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
     version('trunk', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
 
