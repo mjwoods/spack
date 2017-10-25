@@ -1,0 +1,11 @@
+packages:
+    openssl:
+        paths:
+            openssl@1.0.1e: /usr
+        buildable: False
+    all:
+        compiler: [gcc@6.3.0, gcc@4.8.5]
+        providers:
+            blas: [openblas]
+            lapack: [openblas]
+            mpi: [openmpi]
