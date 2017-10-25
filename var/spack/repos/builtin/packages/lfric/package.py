@@ -56,7 +56,7 @@ class Lfric(MakefilePackage):
     depends_on('py-jinja2', type='build')
     depends_on('py-psyclone', type='build')
     depends_on('py-numpy', type='build')
-    depends_on('pfunit', type='build')
+    depends_on('pfunit+mpi+openmp', type='build')
 
     def build(self, spec, prefix):
         with working_dir(self.build_directory):
