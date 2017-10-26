@@ -48,6 +48,7 @@ class Lfric(MakefilePackage):
     # but that doesn't work for static builds.
     depends_on('esmf~xerces~pnetcdf~lapack')
     depends_on('xios')
+    depends_on('pfunit+mpi+openmp')
 
     depends_on('gmake', type='build')
     depends_on('python', type='build')
@@ -56,7 +57,6 @@ class Lfric(MakefilePackage):
     depends_on('py-jinja2', type='build')
     depends_on('py-psyclone', type='build')
     depends_on('py-numpy', type='build')
-    depends_on('pfunit+mpi+openmp', type='build')
 
     def build(self, spec, prefix):
         with working_dir(self.build_directory):
