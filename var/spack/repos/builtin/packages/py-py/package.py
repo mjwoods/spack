@@ -35,6 +35,7 @@ class PyPy(PythonPackage):
         'py', 'py._code', 'py._io', 'py._log', 'py._path', 'py._process',
     ]
 
+    version('1.4.34', 'd9c3d8f734b0819ff48e355d77bf1730')
     version('1.4.33', '15d7107cbb8b86593bf9afa16e56da65')
     version('1.4.31', '5d2c63c56dc3f2115ec35c066ecd582b')
 
