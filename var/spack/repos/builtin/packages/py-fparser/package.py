@@ -30,8 +30,28 @@ class PyFparser(PythonPackage):
     """Parser for Fortran 77..2003 code."""
 
     homepage = "https://github.com/stfc/fparser"
-    url      = "https://pypi.io/packages/source/f/fparser/fparser-0.0.5.tar.gz"
+    url      = "https://github.com/stfc/fparser/archive/0.0.5.tar.gz"
 
-    version('0.0.5', 'f42397ff653f1f913c166aab3acf74bb')
+    version('0.0.5', 'e93d2eae721bf820cf60135473e9c5c7')
 
     depends_on('py-setuptools', type='build')
+
+    depends_on('python', type=('build', 'run'))
+    depends_on('py-numpy', type=('build', 'run'))
+
+    # Use type='test' when available:
+    depends_on('py-nose', type='build')
+    depends_on('py-py', type='build')
+    depends_on('py-pytest', type='build')
+    depends_on('py-six', type='build')
+    depends_on('py-appdirs', type='build')
+    depends_on('py-enum34', type='build')
+    depends_on('py-hypothesis', type='build')
+    depends_on('py-packaging', type='build')
+    depends_on('py-pyparsing', type='build')
+
+    @run_after('install')
+    @on_package_attributes(run_tests=True)
+    def check_build(self):
+         with working_dir('src'):
+             Executable('py.test')()
