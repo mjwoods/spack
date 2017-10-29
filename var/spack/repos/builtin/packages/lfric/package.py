@@ -36,6 +36,7 @@ class Lfric(MakefilePackage):
     version('11689', revision='11689',
             svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
     version('trunk', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
+    version('dev', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/miltonwoods/r11763_fix_tests_gfortran_openmpi')
 
     depends_on('mpi')
     depends_on('netcdf+mpi')
@@ -52,11 +53,15 @@ class Lfric(MakefilePackage):
 
     depends_on('gmake', type='build')
     depends_on('python', type='build')
-    depends_on('py-pyparsing', type='build')
-    depends_on('py-fparser', type='build')
+    #depends_on('py-pyparsing', type='build')
+    #depends_on('py-fparser', type='build')
     depends_on('py-jinja2', type='build')
-    depends_on('py-psyclone', type='build')
+    #depends_on('py-psyclone', type='build')
+    depends_on('psyclone', type='build')
     depends_on('py-numpy', type='build')
+
+    # Debug:
+    parallel = False
 
     def build(self, spec, prefix):
         with working_dir(self.build_directory):
