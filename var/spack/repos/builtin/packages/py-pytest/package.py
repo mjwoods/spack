@@ -36,6 +36,7 @@ class PyPytest(PythonPackage):
         '_pytest.vendored_packages', 'pytest'
     ]
 
+    version('3.2.3', '698f8929e095a1c37876b5567943be79')
     version('3.0.7', '89c60546507dc7eb6e9e40a6e9f720bd')
     version('3.0.2', '61dc36e65a6f6c11c53b1388e043a9f5')
 
@@ -44,6 +45,9 @@ class PyPytest(PythonPackage):
     depends_on('py-setuptools', type=('build', 'run'))
     depends_on('py-py@1.4.29:', type=('build', 'run'))
     depends_on('py-hypothesis@3.5.2:', type=('build', 'run'))
+    #depends_on('py-pyyaml', type=('build', 'run'))
+    #depends_on('py-ordereddict', type=('build', 'run'))
+
 
     # TODO: Add a 'test' deptype
     # depends_on('py-nose', type='test')
