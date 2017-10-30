@@ -38,6 +38,8 @@ class Lfric(MakefilePackage):
     version('trunk', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
     version('dev', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/miltonwoods/r11763_fix_tests_gfortran_openmpi')
 
+    patch('external_libraries_stdc++.patch', when='%gcc')
+
     depends_on('mpi')
     depends_on('netcdf+mpi')
     depends_on('netcdf-fortran')
