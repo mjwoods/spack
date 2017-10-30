@@ -74,5 +74,5 @@ class Lfric(MakefilePackage):
             spack_env.set('FPP', 'fpp')
         else:
             spack_env.set('FPP', 'ftn -eP')
-        spack_env.set('LDMPI', 'mpif90')
+        spack_env.set('LDMPI', self.spec['mpi'].mpifc)
         spack_env.set('PROFILE', 'fast-debug')
