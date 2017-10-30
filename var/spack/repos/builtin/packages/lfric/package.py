@@ -70,14 +70,15 @@ class Lfric(MakefilePackage):
             inspect.getmodule(self).make('VERBOSE=1')
 
     def setup_environment(self, spack_env, run_env):
-        if self.spec.satisfies('%gcc'):
+        spec = self.spec
+        if spec.satisfies('%gcc'):
             spack_env.set('FPP', 'cpp -traditional-cpp')
-        elif self.spec.satisfies('%intel'):
+        elif spec.satisfies('%intel'):
             spack_env.set('FPP', 'fpp')
         else:
             spack_env.set('FPP', 'ftn -eP')
         if spec.satisfies('^openmpi'):
             spack_env.set('OMPI_MCA_orte_execute_quiet', '1')
             spack_env.append_flags('FFLAGS', '-I%s' % spec['mpi'].prefix.lib)
-        spack_env.set('LDMPI', self.spec['mpi'].mpifc)
+        spack_env.set('LDMPI', spec['mpi'].mpifc)
         spack_env.set('PROFILE', 'fast-debug')
