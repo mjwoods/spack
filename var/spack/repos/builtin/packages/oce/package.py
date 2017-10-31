@@ -35,6 +35,7 @@ class Oce(Package):
     homepage = "https://github.com/tpaviot/oce"
     url = "https://github.com/tpaviot/oce/archive/OCE-0.18.tar.gz"
 
+    version('0.18.2', '6dfd68e459e2c62387579888a867281f')
     version('0.18.1', '2a7597f4243ee1f03245aeeb02d00956')
     version('0.18',   '226e45e77c16a4a6e127c71fefcd171410703960ae75c7ecc7eb68895446a993')
     version('0.17.2', 'bf2226be4cd192606af677cf178088e5')
@@ -58,6 +59,10 @@ class Oce(Package):
     # https://github.com/tpaviot/oce/issues/605
     # https://github.com/tpaviot/oce/commit/61cb965b9ffeca419005bc15e635e67589c421dd.patch
     patch('null.patch', when='@0.16:0.17.1')
+
+    # OCE depends on xlocale.h from glibc-headers but it was removed in 2.26,
+    # see https://github.com/tpaviot/oce/issues/675
+    patch('xlocale.patch', level=0, when='@0.18.1:')
 
     # fix build with Xcode 8 "previous definition of CLOCK_REALTIME"
     # reported 27 Sep 2016 https://github.com/tpaviot/oce/issues/643
