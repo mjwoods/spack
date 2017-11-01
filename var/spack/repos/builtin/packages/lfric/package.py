@@ -63,8 +63,10 @@ class Lfric(MakefilePackage):
     depends_on('py-numpy', type='build')
 
     def build(self, spec, prefix):
-        with working_dir(self.build_directory):
-            inspect.getmodule(self).make('VERBOSE=1')
+        with working_dir('mesh_tools'):
+            inspect.getmodule(self).make('build', 'verbose=1')
+        with working_dir('gungho'):
+            inspect.getmodule(self).make('build', 'verbose=1')
 
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
