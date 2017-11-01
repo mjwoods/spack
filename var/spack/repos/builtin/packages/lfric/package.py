@@ -25,6 +25,7 @@
 #
 from spack import *
 import inspect
+from distutils.dir_util import copy_tree
 
 
 class Lfric(MakefilePackage):
@@ -67,6 +68,10 @@ class Lfric(MakefilePackage):
             inspect.getmodule(self).make('build', 'verbose=1')
         with working_dir('gungho'):
             inspect.getmodule(self).make('build', 'verbose=1')
+
+    def install(self, spec, prefix):
+        copy_tree(join_path('mesh_tools', 'bin'), prefix.bin)
+        copy_tree(join_path('gungho', 'bin'), prefix.bin)
 
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
