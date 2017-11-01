@@ -89,6 +89,7 @@ class Lfric(MakefilePackage):
         with working_dir(join_path('gungho', 'example')):
            mpiexec = Executable('mpiexec')
            gungho = join_path(self.prefix.bin, 'gungho')
+           env['OMP_NUM_THREADS'] = '2'
            mpiexec('-n', '1', gungho, 'gungho_configuration.nml')
 
     def setup_environment(self, spack_env, run_env):
