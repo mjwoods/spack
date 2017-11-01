@@ -62,9 +62,6 @@ class Lfric(MakefilePackage):
     depends_on('psyclone', type='build')
     depends_on('py-numpy', type='build')
 
-    # Debug:
-    parallel = False
-
     def build(self, spec, prefix):
         with working_dir(self.build_directory):
             inspect.getmodule(self).make('VERBOSE=1')
