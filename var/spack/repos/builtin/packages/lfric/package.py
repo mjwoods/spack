@@ -76,12 +76,20 @@ class Lfric(MakefilePackage):
     @run_after('install')
     @on_package_attributes(run_tests=True)
     def check_install(self):
-        mpiexec = Executable('mpiexec')
-        gungho = join_path(self.prefix.bin, 'gungho')
+        with working_dir(join_path('mesh_tools', 'example')):
+           cubemesh = join_path(self.prefix.bin,
+                                'cubedsphere_mesh_generator')
+           Executable(cubemesh)('cubedsphere.nml')
+           bipmesh = join_path(self.prefix.bin,
+                               'biperiodic_mesh_generator')
+           Executable(bipmesh)('biperiodic.nml')
+           summary = join_path(self.prefix.bin,
+                               'summarise_ugrid')
+           Executable(summary)('mesh_C12.nc')
         with working_dir(join_path('gungho', 'example')):
-            mpiexec('-n', '2', gungho, 'gungho_configuration.nml')
-        with working_dir(join_path('gungho', 'gw_example')):
-            mpiexec('-n', '2', gungho, 'gravity_wave_configuration.nml')
+           mpiexec = Executable('mpiexec')
+           gungho = join_path(self.prefix.bin, 'gungho')
+           mpiexec('-n', '1', gungho, 'gungho_configuration.nml')
 
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
