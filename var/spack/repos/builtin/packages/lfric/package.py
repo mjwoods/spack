@@ -73,6 +73,16 @@ class Lfric(MakefilePackage):
         copy_tree(join_path('mesh_tools', 'bin'), prefix.bin)
         copy_tree(join_path('gungho', 'bin'), prefix.bin)
 
+    @run_after('install')
+    @on_package_attributes(run_tests=True)
+    def check_install(self):
+        mpiexec = Executable('mpiexec')
+        gungho = join_path(self.prefix.bin, 'gungho')
+        with working_dir(join_path('gungho', 'example')):
+            mpiexec('-n', '2', gungho, 'gungho_configuration.nml')
+        with working_dir(join_path('gungho', 'gw_example')):
+            mpiexec('-n', '2', gungho, 'gravity_wave_configuration.nml')
+
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
         if spec.satisfies('%gcc'):
