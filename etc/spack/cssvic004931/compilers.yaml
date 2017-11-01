@@ -25,3 +25,29 @@ compilers:
       fc: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.3.0-25d5bficqjhp272cil37hy3znbqrqoqj/bin/gfortran
     spec: gcc@6.3.0
     target: x86_64
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.1.0-mtnqaeihiys4ukmruxar7yz32vvzkazr/bin/gcc
+      cxx: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.1.0-mtnqaeihiys4ukmruxar7yz32vvzkazr/bin/g++
+      f77: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.1.0-mtnqaeihiys4ukmruxar7yz32vvzkazr/bin/gfortran
+      fc: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.1.0-mtnqaeihiys4ukmruxar7yz32vvzkazr/bin/gfortran
+    spec: gcc@6.1.0
+    target: x86_64
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.2.0-mfxofxwworgmahymtwu4kx7myc54iloe/bin/gcc
+      cxx: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.2.0-mfxofxwworgmahymtwu4kx7myc54iloe/bin/g++
+      f77: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.2.0-mfxofxwworgmahymtwu4kx7myc54iloe/bin/gfortran
+      fc: /home/mwoods/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.2.0-mfxofxwworgmahymtwu4kx7myc54iloe/bin/gfortran
+    spec: gcc@7.2.0
+    target: x86_64
