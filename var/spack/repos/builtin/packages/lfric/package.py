@@ -89,11 +89,10 @@ class Lfric(MakefilePackage):
         with working_dir(join_path('gungho', 'example')):
            mpiexec = Executable('mpiexec')
            gungho = join_path(self.prefix.bin, 'gungho')
-           env['OMP_NUM_THREADS'] = str(make_jobs)
-           # Total number of MPI processes must be a multiple of 6
-           # for a cubed-sphere domain. To build on smaller systems,
-           # we test with a single MPI process:
-           mpiexec('-n', '1', gungho, 'gungho_configuration.nml')
+           env['OMP_NUM_THREADS'] = '1'
+           # Total number of processors must be a multiple of 6
+           # for a cubed-sphere domain:
+           mpiexec('-n', '6', gungho, 'gungho_configuration.nml')
 
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
