@@ -90,9 +90,15 @@ class Lfric(MakefilePackage):
            mpiexec = Executable('mpiexec')
            gungho = join_path(self.prefix.bin, 'gungho')
            env['OMP_NUM_THREADS'] = '1'
+           args = []
+           if 'openmpi' in self.spec:
+               # Allow openmpi to oversubscribe cpus,
+               # to avoid test failure on small systems:
+               args.append('--oversubscribe')
            # Total number of processors must be a multiple of 6
            # for a cubed-sphere domain:
-           mpiexec('-n', '6', gungho, 'gungho_configuration.nml')
+           args.extend(['-n', '6', gungho, 'gungho_configuration.nml'])
+           mpiexec(*args)
 
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
