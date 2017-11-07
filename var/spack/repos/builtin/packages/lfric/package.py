@@ -59,8 +59,8 @@ class Lfric(MakefilePackage):
     #depends_on('py-pyparsing', type='build')
     #depends_on('py-fparser', type='build')
     depends_on('py-jinja2', type='build')
-    #depends_on('py-psyclone', type='build')
-    depends_on('psyclone', type='build')
+    depends_on('py-psyclone', type='build')
+    #depends_on('psyclone', type='build')
     depends_on('py-numpy', type='build')
 
     def build(self, spec, prefix):
@@ -89,11 +89,16 @@ class Lfric(MakefilePackage):
         with working_dir(join_path('gungho', 'example')):
            mpiexec = Executable('mpiexec')
            gungho = join_path(self.prefix.bin, 'gungho')
-           env['OMP_NUM_THREADS'] = str(make_jobs)
-           # Total number of MPI processes must be a multiple of 6
-           # for a cubed-sphere domain. To build on smaller systems,
-           # we test with a single MPI process:
-           mpiexec('-n', '1', gungho, 'gungho_configuration.nml')
+           env['OMP_NUM_THREADS'] = '1'
+           args = []
+           if 'openmpi' in self.spec:
+               # Allow openmpi to oversubscribe cpus,
+               # to avoid test failure on small systems:
+               args.append('--oversubscribe')
+           # Total number of processors must be a multiple of 6
+           # for a cubed-sphere domain:
+           args.extend(['-n', '6', gungho, 'gungho_configuration.nml'])
+           mpiexec(*args)
 
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
