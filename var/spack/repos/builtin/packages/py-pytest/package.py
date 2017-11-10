@@ -6,7 +6,7 @@
 # Created by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
 # LLNL-CODE-647188
 #
-# For details, see https://github.com/llnl/spack
+# For details, see https://github.com/spack/spack
 # Please also see the NOTICE and LICENSE files for our notice and the LGPL.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -43,6 +43,7 @@ class PyPytest(PythonPackage):
     # Most Python packages only require setuptools as a build dependency.
     # However, pytest requires setuptools during runtime as well.
     depends_on('py-setuptools', type=('build', 'run'))
+    depends_on('py-setuptools-scm', type=('build', 'run'))
     depends_on('py-py@1.4.29:', type=('build', 'run'))
     depends_on('py-hypothesis@3.5.2:', type=('build', 'run'))
     #depends_on('py-pyyaml', type=('build', 'run'))

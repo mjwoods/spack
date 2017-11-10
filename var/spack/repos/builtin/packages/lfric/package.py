@@ -34,7 +34,7 @@ class Lfric(MakefilePackage):
     homepage = "https://code.metoffice.gov.uk/trac/lfric"
     url = "https://code.metoffice.gov.uk/trac/lfric/browser"
 
-    version('11689', revision='11689',
+    version('11864', revision='11864',
             svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
     version('trunk', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk')
     version('dev', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/miltonwoods/r11763_fix_tests_gfortran_openmpi')
