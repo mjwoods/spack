@@ -38,3 +38,6 @@ class PyCython(PythonPackage):
     # These versions contain illegal Python3 code...
     version('0.22', '1ae25add4ef7b63ee9b4af697300d6b6')
     version('0.21.2', 'd21adb870c75680dc857cd05d41046a4')
+
+    version('0.19.2', '4af1218346510b464c0a6bf15500d0e2')
+
