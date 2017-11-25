@@ -102,7 +102,7 @@ class Lfric(MakefilePackage):
 
     def setup_environment(self, spack_env, run_env):
         spec = self.spec
-        if spec.satisfies('%gcc'):
+        if spec.satisfies('%gcc') or spec.satisfies('%clang'):
             spack_env.set('FPP', 'cpp -traditional-cpp')
         elif spec.satisfies('%intel'):
             spack_env.set('FPP', 'fpp')
