@@ -1,0 +1,11 @@
+--- a/gungho/Makefile	2017-10-30 11:42:48.622887779 +1100
++++ b/gungho/Makefile	2017-10-30 11:42:43.515868313 +1100
+@@ -8,7 +8,7 @@
+ 
+ export IGNORE_DEPENDENCIES = netcdf MPI ESMF pfunit_mod planet_constants_mod xios mod_wait
+ export EXTERNAL_DYNAMIC_LIBRARIES = esmf netcdff netcdf hdf5
+-export EXTERNAL_STATIC_LIBRARIES = xios
++export EXTERNAL_STATIC_LIBRARIES = xios c++
+ 
+ LFRIC_TARGET_PLATFORM ?= generic-x86
+ export OPTIMISATION_PATH ?= $(wildcard optimisation/$(LFRIC_TARGET_PLATFORM))

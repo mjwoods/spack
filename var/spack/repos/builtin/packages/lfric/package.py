@@ -40,6 +40,7 @@ class Lfric(MakefilePackage):
     version('dev', svn='https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/miltonwoods/r11763_fix_tests_gfortran_openmpi')
 
     patch('external_libraries_stdc++.patch', when='%gcc')
+    patch('external_libraries_libc++.patch', when='%clang platform=darwin')
 
     depends_on('mpi')
     depends_on('netcdf+mpi')
