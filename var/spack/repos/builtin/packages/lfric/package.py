@@ -65,9 +65,9 @@ class Lfric(MakefilePackage):
 
     def build(self, spec, prefix):
         with working_dir('mesh_tools'):
-            inspect.getmodule(self).make('build', 'verbose=1')
+            inspect.getmodule(self).make('build', 'VERBOSE=1')
         with working_dir('gungho'):
-            inspect.getmodule(self).make('build', 'verbose=1')
+            inspect.getmodule(self).make('build', 'VERBOSE=1')
 
     def install(self, spec, prefix):
         copy_tree(join_path('mesh_tools', 'bin'), prefix.bin)
