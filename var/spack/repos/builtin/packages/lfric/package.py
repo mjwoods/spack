@@ -55,6 +55,7 @@ class Lfric(MakefilePackage):
     depends_on('pfunit+mpi+openmp')
 
     depends_on('gmake', type='build')
+    depends_on('findutils', type='build', when='platform=darwin')
     depends_on('python', type='build')
     #depends_on('py-pyparsing', type='build')
     #depends_on('py-fparser', type='build')
