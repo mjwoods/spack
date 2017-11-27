@@ -76,6 +76,8 @@ class Graphviz(AutotoolsPackage):
     variant('tcl', default=False,
             description='Enable for optional tcl language bindings'
             ' (not yet functional)')
+    variant('X', default=True,
+            description='Enable X display features')
 
     parallel = False
 
@@ -95,7 +97,7 @@ class Graphviz(AutotoolsPackage):
     depends_on('libxrender')
     depends_on('fontconfig')
     depends_on('zlib')
-
+    
     def configure_args(self):
         spec = self.spec
         options = []
@@ -125,6 +127,16 @@ class Graphviz(AutotoolsPackage):
         for var in tested_bindings:
             enable = 'enable' if (var in spec) else 'disable'
             options.append('--%s-%s' % (enable, var[1:]))
+
+        # These features require additional dependencies.
+        # If they are needed, the dependencies should be defined above
+        # and wrapped in suitable new variants.
+        without_features = ('poppler', 'rsvg', 'pangocairo',
+            'lasi', 'glitz', 'gdk', 'gdk-pixbuf', 'gtk', 'gtkgl', 'gtkglext',
+            'gts', 'ann', 'glade', 'qt', 'quartz', 'gd', 'glut')
+            
+        for feature in without_features:
+            options.append('--without-%s' % feature)
 
         # On OSX fix the compiler error:
         # In file included from tkStubLib.c:15:
