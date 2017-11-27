@@ -89,6 +89,13 @@ class Graphviz(AutotoolsPackage):
     depends_on('jdk', when='+java')
     depends_on('python@2:2.8', when='+python')
 
+    depends_on('libxaw')
+    depends_on('libxpm')
+    depends_on('libx11')
+    depends_on('libxrender')
+    depends_on('fontconfig')
+    depends_on('zlib')
+
     def configure_args(self):
         spec = self.spec
         options = []
