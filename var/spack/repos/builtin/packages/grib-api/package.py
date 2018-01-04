@@ -37,7 +37,6 @@ class GribApi(CMakePackage):
     maintainers = ['skosukhin']
 
     version('1.24.0', 'dcc549069cdeeaa1959732c36ab3136f')
-    version('1.23.1', '478e9f78d8e98acae0ec071ccbd3246d03ad3f39')
     version('1.21.0', 'eb64c5eb72e6e90841237cba9d644016')
     version('1.17.0', 'bca7114d2c3100501a08190a146818d2')
     version('1.16.0', '8c7fdee03344e4379d400ae20976a460')
