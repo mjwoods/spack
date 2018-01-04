@@ -42,6 +42,8 @@ class Serf(SConsPackage):
 
     depends_on('apr')
     depends_on('apr-util')
+    depends_on('python', type='build')
+    depends_on('expat')
     depends_on('openssl')
     depends_on('zlib')
 

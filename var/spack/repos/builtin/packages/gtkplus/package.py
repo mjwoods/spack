@@ -47,6 +47,19 @@ class Gtkplus(AutotoolsPackage):
     depends_on('gobject-introspection', when='+X')
     depends_on('shared-mime-info')
 
+    depends_on('libxinerama', when='+X')
+    depends_on('libxrandr', when='+X')
+    depends_on('libxcomposite', when='+X')
+    depends_on('libxext', when='+X')
+    depends_on('libxdamage', when='+X')
+    depends_on('libxcb', when='+X')
+    depends_on('libx11', when='+X')
+    depends_on('libxrender', when='+X')
+    depends_on('libxext', when='+X')
+    depends_on('libxcb', when='+X')
+    depends_on('libxcursor', when='+X')
+    depends_on('libxfixes', when='+X')
+
     patch('no-demos.patch')
 
     def patch(self):

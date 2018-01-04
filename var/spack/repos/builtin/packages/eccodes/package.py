@@ -37,6 +37,7 @@ class Eccodes(CMakePackage):
     maintainers = ['skosukhin']
 
     version('2.5.0', '5a7e92c58418d855082fa573efd352aa')
+    version('2.4.1', '30fa69f3cec657061dfe9d6e839500f3b4ecb943')
     version('2.2.0', 'b27e6f0a3eea5b92dac37372e4c45a62')
 
     variant('netcdf', default=False,

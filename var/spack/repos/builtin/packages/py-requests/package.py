@@ -49,6 +49,14 @@ class PyRequests(PythonPackage):
 
     depends_on('py-setuptools', type='build')
 
+    depends_on('py-pysocks', type=('build','run'))
+    depends_on('py-pyopenssl', type=('build','run'))
+    depends_on('py-idna', type=('build','run'))
+    depends_on('py-cryptography', type=('build','run'))
+    depends_on('py-urllib3', type=('build','run'))
+    depends_on('py-chardet', type=('build','run'))
+    depends_on('py-certifi', type=('build','run'))
+    
     # TODO: Add a 'test' deptype
     # depends_on('py-pytest@2.8.0:',        type='test')
     # depends_on('py-pytest-cov',           type='test')

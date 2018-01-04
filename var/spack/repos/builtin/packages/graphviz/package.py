@@ -73,6 +73,8 @@ class Graphviz(AutotoolsPackage):
     variant('tcl', default=False,
             description='Enable for optional tcl language bindings'
             ' (not yet functional)')
+    variant('X', default=True,
+            description='Enable X display features')
 
     variant('pangocairo', default=False,
             description='Build with pango+cairo support (more output formats)')
@@ -110,6 +112,13 @@ class Graphviz(AutotoolsPackage):
 
     depends_on('java', when='+java')
     depends_on('python@2:2.8', when='+python')
+
+    depends_on('libxaw')
+    depends_on('libxpm')
+    depends_on('libx11')
+    depends_on('libxrender')
+    depends_on('fontconfig')
+    depends_on('zlib')    
 
     def patch(self):
         # Fix a few variable names, gs after 9.18 renamed them
@@ -155,6 +164,16 @@ class Graphviz(AutotoolsPackage):
                 options.append('--with-{0}'.format(var[1:]))
             else:
                 options.append('--without-{0}'.format(var[1:]))
+
+        # These features require additional dependencies.
+        # If they are needed, the dependencies should be defined above
+        # and wrapped in suitable new variants.
+        without_features = ('poppler', 'rsvg', 'pangocairo',
+            'lasi', 'glitz', 'gdk', 'gdk-pixbuf', 'gtk', 'gtkgl', 'gtkglext',
+            'gts', 'ann', 'glade', 'qt', 'quartz', 'gd', 'glut')
+            
+        for feature in without_features:
+            options.append('--without-%s' % feature)
 
         # On OSX fix the compiler error:
         # In file included from tkStubLib.c:15:

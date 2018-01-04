@@ -1,0 +1,19 @@
+packages:
+    openssl:
+        paths:
+            openssl@1.0.1e: /usr
+        buildable: False
+    hdf5:
+        variants: ~mpi
+    netcdf:
+        variants: ~mpi
+    mesa:
+        variants: ~dri
+    qt:
+        variants: +mesa
+        version: [5.7.1]
+    all:
+        compiler: [gcc@6.3.0, gcc@4.8.5]
+        providers:
+            blas: [openblas]
+            lapack: [openblas]
