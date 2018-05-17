@@ -38,8 +38,7 @@ class Ncl(Package):
     homepage = "https://www.ncl.ucar.edu"
 
     version('6.4.0', 'a981848ddcaf1c263279648265f24766',
-            url='https://www.earthsystemgrid.org/download/fileDownload.html?logicalFileId=86b9bec2-fa01-11e6-a976-00c0f03d5b7c',
-            extension='tar.gz')
+            url='https://www.earthsystemgrid.org/dataset/ncl.640.src/file/ncl_ncarg-6.4.0.tar.gz')
 
     patch('spack_ncl.patch')
     # Make ncl compile with hdf5 1.10
