@@ -24,3 +24,5 @@ lib/spack/spack/test/.cache
 *.in.log
 *.out.log
 /mirror
+/etc/spack/linux
+/etc/spack/cray
