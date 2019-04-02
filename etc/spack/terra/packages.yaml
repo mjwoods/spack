@@ -1,0 +1,44 @@
+packages:
+  gettext:
+    # Fails to build gettext@0.19.8.1+libxml2:
+    variants: ~libxml2
+  mesa:
+    variants: ~dri
+  mpich:
+    modules:
+      mpich@7.5.2%gcc@8.2.0: cray-mpich/7.5.2
+      mpich@7.5.2%intel@17.0.7.259: cray-mpich/7.5.2
+    buildable: False
+  netcdf:
+    modules:
+      netcdf@4.3.3.1%gcc@8.2.0 ~mpi: cray-netcdf/4.3.3.1
+      netcdf@4.3.3.1@intel@17.0.7.259 ~mpi: cray-netcdf/4.3.3.1
+      netcdf@4.3.3.1%gcc@8.2.0 +mpi: cray-netcdf-hdf5parallel/4.3.3.1
+      netcdf@4.3.3.1@intel@17.0.7.259 +mpi: cray-netcdf-hdf5parallel/4.3.3.1
+    buildable: False
+  hdf5:
+    modules:
+      hdf5@1.8.14%gcc@8.2.0 ~mpi: cray-hdf5/1.8.14
+      hdf5@1.8.14%intel@17.0.7.259 ~mpi: cray-hdf5/1.8.14
+      hdf5@1.8.14%gcc@8.2.0 +mpi: cray-hdf5-parallel/1.8.14
+      hdf5@1.8.14%intel@17.0.7.259 +mpi: cray-hdf5-parallel/1.8.14
+    buildable: False
+  intel-mkl:
+    paths:
+      intel-mkl@2017.1.132%gcc@8.2.0: /opt/intel 
+      intel-mkl@2017.1.132%intel@17.0.7.259: /opt/intel
+    buildable: False
+  pkg-config:
+    # Needed for correct behaviour of Cray modules,
+    # because it appends /usr/lib64/pkgconfig to the search path.
+    paths:
+      pkg-config@0.28.3: /usr
+    buildable: False
+  qt:
+    variants: +mesa
+  all:
+    compiler: [gcc@8.2.0, intel@17.0.7.259]
+    providers:
+      blas: [intel-mkl, openblas]
+      lapack: [intel-mkl, openblas]
+      mpi: [mpich]

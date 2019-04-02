@@ -1,0 +1,11 @@
+packages:
+    openssl:
+        paths:
+            openssl@1.0.2k: /usr
+        buildable: False
+    hdf5:
+        variants: ~mpi
+    netcdf:
+        variants: ~mpi
+    all:
+        compiler: [gcc@8.2.0, gcc@4.8.5]
