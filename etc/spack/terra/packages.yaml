@@ -34,6 +34,9 @@ packages:
     paths:
       pkg-config@0.28.3: /usr
     buildable: False
+  python:
+    version: [3.6.8]
+    variants: +tk
   all:
     compiler: [gcc@8.2.0, intel@17.0.7.259]
     providers:
