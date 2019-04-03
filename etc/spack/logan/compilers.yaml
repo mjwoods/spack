@@ -12,3 +12,16 @@ compilers:
       fc: /usr/bin/gfortran
     spec: gcc@4.8.5
     target: x86_64
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules: []
+    operating_system: rhel7
+    paths:
+      cc: /g/ns/rd/rdshare/spack/rhel7/opt/spack/linux-rhel7-x86_64/gcc-4.8.5/gcc-8.3.0-opnwtdjumg2hxo4ljvnx77ugb6afmvj3/bin/gcc
+      cxx: /g/ns/rd/rdshare/spack/rhel7/opt/spack/linux-rhel7-x86_64/gcc-4.8.5/gcc-8.3.0-opnwtdjumg2hxo4ljvnx77ugb6afmvj3/bin/g++
+      f77: /g/ns/rd/rdshare/spack/rhel7/opt/spack/linux-rhel7-x86_64/gcc-4.8.5/gcc-8.3.0-opnwtdjumg2hxo4ljvnx77ugb6afmvj3/bin/gfortran
+      fc: /g/ns/rd/rdshare/spack/rhel7/opt/spack/linux-rhel7-x86_64/gcc-4.8.5/gcc-8.3.0-opnwtdjumg2hxo4ljvnx77ugb6afmvj3/bin/gfortran
+    spec: gcc@8.3.0
+    target: x86_64
