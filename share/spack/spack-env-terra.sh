@@ -9,6 +9,6 @@ export SPACK_ROOT="${SPACK_ROOT-/g/sc/projects_lustre/pr_rdshare/spack}"
 # Remove compilers from environment:
 module unload PrgEnv-cray PrgEnv-gnu PrgEnv-intel cray gcc intel
 
-. "$SPACK_ROOT/share/spack/setup-env-terra.sh"
+. "$SPACK_ROOT/share/spack/setup-env.sh"
 
 umask 0002
