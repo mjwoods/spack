@@ -22,10 +22,10 @@ packages:
     buildable: False
   hdf5:
     modules:
-      hdf5@1.8.14%gcc@7.3.0 ~mpi: cray-hdf5/1.8.14
-      hdf5@1.8.14%intel@17.0.7.259 ~mpi: cray-hdf5/1.8.14
-      hdf5@1.8.14%gcc@7.3.0 +mpi: cray-hdf5-parallel/1.8.14
-      hdf5@1.8.14%intel@17.0.7.259 +mpi: cray-hdf5-parallel/1.8.14
+      hdf5@1.8.14%gcc@7.3.0 ~mpi+hl: cray-hdf5/1.8.14
+      hdf5@1.8.14%intel@17.0.7.259 ~mpi+hl: cray-hdf5/1.8.14
+      hdf5@1.8.14%gcc@7.3.0 +mpi+hl: cray-hdf5-parallel/1.8.14
+      hdf5@1.8.14%intel@17.0.7.259 +mpi+hl: cray-hdf5-parallel/1.8.14
     buildable: False
 #  intel-mkl:
 #    paths:
