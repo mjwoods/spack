@@ -1,2 +1,3 @@
 mirrors:
-  rdshare: file:///g/sc/projects_lustre/pr_rdshare/spack/mirror
+  #rdshare: file:///g/sc/projects_lustre/pr_rdshare/spack/mirror
+  dev: file:///g/sc/projects_lustre/pr_nwp/mwoods/spack-dev/mirror

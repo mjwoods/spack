@@ -31,8 +31,9 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-cray
-    - cce/8.4.1
-    operating_system: CNL
+    - !!python/unicode
+      'cce/8.4.1'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -46,8 +47,41 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-cray
-    - cce/8.4.5
-    operating_system: CNL
+    - !!python/unicode
+      'cce/8.5.7'
+    operating_system: cnl5
+    paths:
+      cc: cc
+      cxx: CC
+      f77: ftn
+      fc: ftn
+    spec: cce@8.5.7
+    target: any
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules:
+    - PrgEnv-cray
+    - !!python/unicode
+      'cce/8.7.0'
+    operating_system: cnl5
+    paths:
+      cc: cc
+      cxx: CC
+      f77: ftn
+      fc: ftn
+    spec: cce@8.7.0
+    target: any
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules:
+    - PrgEnv-cray
+    - !!python/unicode
+      'cce/8.4.5'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -61,14 +95,15 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-cray
-    - cce/8.5.7
-    operating_system: CNL
+    - !!python/unicode
+      'cce/8.6.5'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
       f77: ftn
       fc: ftn
-    spec: cce@8.5.7
+    spec: cce@8.6.5
     target: any
 - compiler:
     environment: {}
@@ -76,8 +111,9 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-gnu
-    - gcc/4.8.1
-    operating_system: CNL
+    - !!python/unicode
+      'gcc/4.8.1'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -91,8 +127,9 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-gnu
-    - gcc/5.1.0
-    operating_system: CNL
+    - !!python/unicode
+      'gcc/5.1.0'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -106,8 +143,9 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-gnu
-    - gcc/6.1.0
-    operating_system: CNL
+    - !!python/unicode
+      'gcc/6.1.0'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -121,8 +159,25 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-gnu
-    - gcc/4.9.3
-    operating_system: CNL
+    - !!python/unicode
+      'gcc/7.2.0'
+    operating_system: cnl5
+    paths:
+      cc: cc
+      cxx: CC
+      f77: ftn
+      fc: ftn
+    spec: gcc@7.2.0
+    target: any
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules:
+    - PrgEnv-gnu
+    - !!python/unicode
+      'gcc/4.9.3'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -136,8 +191,9 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-gnu
-    - gcc/5.3.0
-    operating_system: CNL
+    - !!python/unicode
+      'gcc/5.3.0'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -151,8 +207,9 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-gnu
-    - gcc/6.3.0
-    operating_system: CNL
+    - !!python/unicode
+      'gcc/6.3.0'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -165,9 +222,26 @@ compilers:
     extra_rpaths: []
     flags: {}
     modules:
+    - PrgEnv-gnu
+    - !!python/unicode
+      'gcc/7.3.0'
+    operating_system: cnl5
+    paths:
+      cc: cc
+      cxx: CC
+      f77: ftn
+      fc: ftn
+    spec: gcc@7.3.0
+    target: any
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules:
     - PrgEnv-intel
-    - intel/16.0.2.181
-    operating_system: CNL
+    - !!python/unicode
+      'intel/16.0.2.181'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -181,23 +255,9 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-intel
-    - intel/16.0.3.210
-    operating_system: CNL
-    paths:
-      cc: cc
-      cxx: CC
-      f77: ftn
-      fc: ftn
-    spec: intel@16.0.3.210
-    target: any
-- compiler:
-    environment: {}
-    extra_rpaths: []
-    flags: {}
-    modules:
-    - PrgEnv-intel
-    - intel/17.0.1.132
-    operating_system: CNL
+    - !!python/unicode
+      'intel/17.0.1.132'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
@@ -211,12 +271,45 @@ compilers:
     flags: {}
     modules:
     - PrgEnv-intel
-    - intel/17.0.7.259
-    operating_system: CNL
+    - !!python/unicode
+      'intel/17.0.7.259'
+    operating_system: cnl5
     paths:
       cc: cc
       cxx: CC
       f77: ftn
       fc: ftn
     spec: intel@17.0.7.259
+    target: any
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules:
+    - PrgEnv-intel
+    - !!python/unicode
+      'intel/16.0.3.210'
+    operating_system: cnl5
+    paths:
+      cc: cc
+      cxx: CC
+      f77: ftn
+      fc: ftn
+    spec: intel@16.0.3.210
+    target: any
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules:
+    - PrgEnv-intel
+    - !!python/unicode
+      'intel/17.0.5.239'
+    operating_system: cnl5
+    paths:
+      cc: cc
+      cxx: CC
+      f77: ftn
+      fc: ftn
+    spec: intel@17.0.5.239
     target: any
