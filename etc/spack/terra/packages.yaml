@@ -15,15 +15,16 @@ packages:
     buildable: False
   netcdf:
     modules:
-      netcdf@4.3.3.1%gcc@7.3.0 ~mpi: cray-netcdf/4.3.3.1
-      netcdf@4.3.3.1%intel@17.0.7.259 ~mpi: cray-netcdf/4.3.3.1
       netcdf@4.3.3.1%gcc@7.3.0 +mpi: cray-netcdf-hdf5parallel/4.3.3.1
       netcdf@4.3.3.1%intel@17.0.7.259 +mpi: cray-netcdf-hdf5parallel/4.3.3.1
     buildable: False
+  netcdf-fortran:
+    modules:
+      netcdf-fortran@4.3.3.1%gcc@7.3.0: cray-netcdf-hdf5parallel/4.3.3.1
+      netcdf-fortran@4.3.3.1%intel@17.0.7.259: cray-netcdf-hdf5parallel/4.3.3.1
+    buildable: False
   hdf5:
     modules:
-      hdf5@1.8.14%gcc@7.3.0 ~mpi+hl: cray-hdf5/1.8.14
-      hdf5@1.8.14%intel@17.0.7.259 ~mpi+hl: cray-hdf5/1.8.14
       hdf5@1.8.14%gcc@7.3.0 +mpi+hl: cray-hdf5-parallel/1.8.14
       hdf5@1.8.14%intel@17.0.7.259 +mpi+hl: cray-hdf5-parallel/1.8.14
     buildable: False
