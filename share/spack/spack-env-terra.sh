@@ -4,7 +4,7 @@
 # Create environment for spack
 export SPACK_FRONT_END=haswell
 export SPACK_BACK_END=haswell
-export SPACK_ROOT="${SPACK_ROOT-/g/sc/projects_lustre/pr_rdshare/spack}"
+export SPACK_ROOT="${SPACK_ROOT-/g/sc/projects_lustre/pr_rdshare/spack-dev/bom-develop3}"
 
 # Remove compilers from environment:
 module unload PrgEnv-cray PrgEnv-gnu PrgEnv-intel cray gcc intel
