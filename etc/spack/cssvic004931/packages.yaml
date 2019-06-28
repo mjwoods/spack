@@ -10,5 +10,8 @@ packages:
     python:
         version: [3.6.8]
         variants: +tk
+# Required by py-scitools-iris@2.2.0:
+    py-matplotlib:
+        version: [2.2.3]
     all:
         compiler: [gcc@8.2.0, gcc@4.8.5]
