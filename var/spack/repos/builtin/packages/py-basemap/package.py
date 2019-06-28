@@ -23,6 +23,9 @@ class PyBasemap(PythonPackage):
     depends_on('py-matplotlib', type=('build', 'run'))
     depends_on('pil', type=('build', 'run'))
     depends_on('geos')
+    depends_on('py-pyshp', type=('build', 'run'))
+    depends_on('py-pyproj', type=('build', 'run'))
+    depends_on('py-six', type=('build', 'run'))
 
     def setup_environment(self, spack_env, run_env):
         spack_env.set('GEOS_DIR', self.spec['geos'].prefix)
